@@ -33,6 +33,7 @@ class MURAKHY_API ATerraFormer : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATerraFormer();
+
 	UPROPERTY(EditAnywhere, Category = Terra)
 	int32 Width;
 	UPROPERTY(EditAnywhere, Category = Terra)
@@ -52,6 +53,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
 		void TerraForm();
+
+	UFUNCTION(BlueprintCallable, Category = Terra)
+	ETileType RandomizeFromMap();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

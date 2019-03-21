@@ -56,7 +56,7 @@ ETileType ATerraFormer::TopTypeOfNeighbors(int tileX, int tileY)
 			mostTimesIndex = i;
 		}
 //		UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("0 val:  %d"), times[i]));
+		
 	}
 	return (ETileType)mostTimesIndex;
 }
@@ -89,6 +89,34 @@ void ATerraFormer::TerraForm()
 		}
 	}
 }
+//TODO pass sorted map
+ETileType ATerraFormer::RandomizeFromMap()
+{
+
+	float randValue = FMath::RandRange(0.f, 1.f);
+	//TODO move sorting out of function to exclude from loop of terraforming
+	LikelihoodMap.ValueSort([](float A, float B) {
+		return A > B; // sort values 
+	});
+
+
+
+	//this is some kinda assembly bullsh
+	float currentLikelihood = 0.f;
+	for(auto& Elem: LikelihoodMap)
+	{
+		if (randValue < currentLikelihood)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("current Like:  %f tile sorted number %d tile like: %f, rand val: %f"), currentLikelihood, (int)Elem.Key, Elem.Value, randValue));
+			return Elem.Key;
+		}
+		currentLikelihood += Elem.Value;
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("returning default")));
+	return ETileType::ET_Desert;
+}
+
+
 
 
 
