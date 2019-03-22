@@ -105,12 +105,13 @@ ETileType ATerraFormer::RandomizeFromMap()
 	float currentLikelihood = 0.f;
 	for(auto& Elem: LikelihoodMap)
 	{
+		currentLikelihood += Elem.Value;
 		if (randValue < currentLikelihood)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("current Like:  %f tile sorted number %d tile like: %f, rand val: %f"), currentLikelihood, (int)Elem.Key, Elem.Value, randValue));
 			return Elem.Key;
 		}
-		currentLikelihood += Elem.Value;
+		
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("returning default")));
 	return ETileType::ET_Desert;
