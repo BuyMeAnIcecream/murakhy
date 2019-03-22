@@ -72,19 +72,16 @@ void ATerraFormer::TerraForm()
 	{
 		for (int y = 0; y < Height; y++)
 		{
-			//		Terra.Add();
 			Tiles.Add(FTile2DArray());
 			for (int x = 0; x < Width; x++)
 			{
-				//my_type test = static_cast<my_type>(FMath::FRandRange(0, 1) % ETileType::);
 				FActorSpawnParameters ActorSpawnParams;
 				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 				ATile* NewTile = GetWorld()->SpawnActor<ATile>(Tile, FVector(x * 200, y * 200, 0), FRotator(0, 0, 0), ActorSpawnParams);
-				NewTile->TileType = ETileType::ET_Desert;
+				NewTile->TileType = RandomizeFromMap();
 				NewTile->UpdateMaterial();
 				Tiles[y].Add(NewTile);
-				//TODO add to array
 			}
 		}
 	}
@@ -92,14 +89,11 @@ void ATerraFormer::TerraForm()
 //TODO pass sorted map
 ETileType ATerraFormer::RandomizeFromMap()
 {
-
 	float randValue = FMath::RandRange(0.f, 1.f);
-	//TODO move sorting out of function to exclude from loop of terraforming
+	//TODO move sorting out of function to exclude from loop of terraforming. pass sorted map as argument
 	LikelihoodMap.ValueSort([](float A, float B) {
 		return A > B; // sort values 
 	});
-
-
 
 	//this is some kinda assembly bullsh
 	float currentLikelihood = 0.f;
@@ -108,16 +102,27 @@ ETileType ATerraFormer::RandomizeFromMap()
 		currentLikelihood += Elem.Value;
 		if (randValue < currentLikelihood)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("current Like:  %f tile sorted number %d tile like: %f, rand val: %f"), currentLikelihood, (int)Elem.Key, Elem.Value, randValue));
+//			GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("current Like:  %f tile sorted number %d tile like: %f, rand val: %f"), currentLikelihood, (int)Elem.Key, Elem.Value, randValue));
 			return Elem.Key;
 		}
 		
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("returning default")));
+//	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("returning default")));
 	return ETileType::ET_Desert;
 }
 
 
 
+void ATerraFormer::Smooth()
+{
+	for (int y = 0; y < Height; y++)
+	{
+		for (int x = 0; x < Width; x++)
+		{
+			Tiles[y][x]->TileType = TopTypeOfNeighbors(x, y);
+			Tiles[y][x]->UpdateMaterial();
+		}
+	}
+}
 
 

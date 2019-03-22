@@ -38,8 +38,8 @@ public:
 	int32 Width;
 	UPROPERTY(EditAnywhere, Category = Terra)
 	int32 Height;
-	UPROPERTY(EditAnywhere, Category = Terra)
-	int32 NOfTypes;
+//	UPROPERTY(EditAnywhere, Category = Terra)
+//	int32 NOfTypes;
 	UPROPERTY(EditAnywhere, Category = Terra)
 	TMap<ETileType, float> LikelihoodMap;
 
@@ -56,6 +56,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
 	ETileType RandomizeFromMap();
+
+	UFUNCTION(BlueprintCallable, Category = Terra)
+		void Smooth();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
