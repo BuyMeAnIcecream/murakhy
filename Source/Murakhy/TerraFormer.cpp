@@ -115,11 +115,22 @@ ETileType ATerraFormer::RandomizeFromMap()
 
 void ATerraFormer::Smooth()
 {
+	//todo dynamic array
+	ETileType NewTileTypes[20][20];
+	float offset = 10000;
 	for (int y = 0; y < Height; y++)
 	{
 		for (int x = 0; x < Width; x++)
 		{
-			Tiles[y][x]->TileType = TopTypeOfNeighbors(x, y);
+			NewTileTypes[y][x] = TopTypeOfNeighbors(x, y);
+		}
+	}
+
+	for (int y = 0; y < Height; y++)
+	{
+		for (int x = 0; x < Width; x++)
+		{
+			Tiles[y][x]->TileType = NewTileTypes[y][x];
 			Tiles[y][x]->UpdateMaterial();
 		}
 	}

@@ -38,8 +38,6 @@ public:
 	int32 Width;
 	UPROPERTY(EditAnywhere, Category = Terra)
 	int32 Height;
-//	UPROPERTY(EditAnywhere, Category = Terra)
-//	int32 NOfTypes;
 	UPROPERTY(EditAnywhere, Category = Terra)
 	TMap<ETileType, float> LikelihoodMap;
 
