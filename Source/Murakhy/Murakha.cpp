@@ -11,6 +11,15 @@ AMurakha::AMurakha()
 
 }
 
+TArray<APawn*> AMurakha::ScanForPawns()
+{
+	TArray<APawn*> Pawns;
+
+
+	return Pawns;
+
+}
+
 // Called when the game starts or when spawned
 void AMurakha::BeginPlay()
 {
@@ -23,6 +32,20 @@ void AMurakha::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AMurakha::UpdateLocation()
+{
+}
+
+FVector2D AMurakha::GetGridLocation_Implementation()
+{
+	return GridLocation;
+}
+
+void AMurakha::SetGridLocation_Implementation(FVector2D NewLoc)
+{
+	GridLocation = NewLoc;
 }
 
 // Called to bind functionality to input
