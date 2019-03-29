@@ -31,7 +31,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	FVector2D GridLocation;
+	FIntPoint GridLocation;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -43,12 +43,12 @@ public:
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
-		FVector2D GetGridLocation();
-	virtual FVector2D GetGridLocation_Implementation() override;
+		FIntPoint GetGridLocation();
+	virtual FIntPoint GetGridLocation_Implementation() override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
-		void SetGridLocation(FVector2D NewLoc);
-	virtual void SetGridLocation_Implementation(FVector2D NewLoc) override;
+		void SetGridLocation(FIntPoint NewLoc);
+	virtual void SetGridLocation_Implementation(FIntPoint NewLoc) override;
 
 	/*
 	//Some pointer is defined to any class inheriting from UObject

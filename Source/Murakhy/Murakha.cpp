@@ -38,12 +38,12 @@ void AMurakha::UpdateLocation()
 {
 }
 
-FVector2D AMurakha::GetGridLocation_Implementation()
+FIntPoint AMurakha::GetGridLocation_Implementation()
 {
 	return GridLocation;
 }
 
-void AMurakha::SetGridLocation_Implementation(FVector2D NewLoc)
+void AMurakha::SetGridLocation_Implementation(FIntPoint NewLoc)
 {
 	GridLocation = NewLoc;
 }
