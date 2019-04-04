@@ -2,11 +2,22 @@
 
 #pragma once
 
+#include "Tile.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Locatable.h"
 #include "Murakha.generated.h"
 
+UENUM(BlueprintType)
+enum class EDirection : uint8
+{
+	ET_North UMETA(DisplayName = "North"),
+	ET_East UMETA(DisplayName = "East"),
+	ET_South UMETA(DisplayName = "South"),
+	ET_West UMETA(DisplayName = "West"),
+	ET_END
+
+};
 
 UCLASS()
 class MURAKHY_API AMurakha : public APawn, public ILocatable
@@ -23,7 +34,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Search")
 	TArray<APawn*> ScanForPawns();
 
-
+	ATile* LocatedOn;
 	//UPROPERTY(EditAnywhere, Category = "Location")
 		
 	//TODO scan area
@@ -36,9 +47,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//TODO implement interface Setter/getter for location. In this function only describe a specific way pawn is placed on a tile
-	UFUNCTION(BlueprintCallable, Category = "Location")
-	void UpdateLocation();
+	
+//	UFUNCTION(BlueprintCallable, Category = "Location")
+//	void UpdateLocation();
 	// Called to bind functionality to input
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -49,6 +60,11 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
 		void SetGridLocation(FIntPoint NewLoc);
 	virtual void SetGridLocation_Implementation(FIntPoint NewLoc) override;
+
+	//TODO implement interface Setter/getter for location. In this function only describe a specific way pawn is placed on a tile
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
+		void UpdateLocation();
+	virtual void UpdateLocation_Implementation() override;
 
 	/*
 	//Some pointer is defined to any class inheriting from UObject

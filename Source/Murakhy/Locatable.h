@@ -29,4 +29,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
 		void SetGridLocation(FIntPoint NewLoc);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
+		void UpdateLocation();
 };

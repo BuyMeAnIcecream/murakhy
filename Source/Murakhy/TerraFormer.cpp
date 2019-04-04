@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TerraFormer.h"
 #include "Engine/World.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Engine/Engine.h"
 
-
+//TODO SPLIT TerraFormer and map
 
 // Sets default values
 ATerraFormer::ATerraFormer()
@@ -18,61 +19,51 @@ void ATerraFormer::BeginPlay()
 	Super::BeginPlay();
 }
 
-ETileType ATerraFormer::TopTypeOfNeighbors(int tileX, int tileY)
-{
-	TArray<int> times;
 
-	times.Init(0, (int)ETileType::ET_END);
-
-	for (int i = tileY - 1; i < tileY + 2; ++i) 
-	{
-		for (int j = tileX - 1; j < tileX + 2 ; ++j)
-		{
-			if (i >= 0 && 
-				j >= 0 &&
-				i < Height &&
-				j < Width)
-			{
-				if (tileX == j && tileY == i)
-				{
-					continue;
-				}
-//				UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);
-				ETileType currentType = Tiles[i][j]->TileType;
-				times[(int)currentType] = times[(int)currentType] + 1;
-//				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("X  = %d Y = %d"), j, i));	
-			}
-		}
-	}
-
-	//this should be a map for sure
-	int mostTimesIndex = 0;
-	int mostTimes = 0;
-	for (int i = 0; i < times.Num(); i++) {
-		//don't care what it returns if there are 2 or more equal results
-		if (mostTimes < times[i])
-		{
-			mostTimes = times[i];
-			mostTimesIndex = i;
-		}
-//		UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);
-		
-	}
-	return (ETileType)mostTimesIndex;
-}
 
 void ATerraFormer::TerraForm()
 {
 	if (!Tile)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Tile not assigned"));
 		return;
 	}
 	UWorld* const World = GetWorld();
 	if (World)
 	{
+		if (!MapToSpawn)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MapToSpawn not assigned"));
+			return;
+		}
+		
+		TArray<AActor*> FoundActors;
+		UGameplayStatics::GetAllActorsOfClass(World, AGridMap::StaticClass(), FoundActors);
+		if (FoundActors.IsValidIndex(0))
+		{
+			AGridMap* FoundMap = Cast<AGridMap>(FoundActors[0]);
+			if (FoundMap)
+			{
+				GridMap = FoundMap;
+				GridMap->GridHeight = Height;
+				GridMap->GridWidth = Width;
+				UE_LOG(LogTemp, Warning, TEXT("Map found"));
+			}
+		}
+		else
+		{
+			FActorSpawnParameters MapSpawnParams;
+			MapSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			GridMap = World->SpawnActor<AGridMap>(MapToSpawn, MapSpawnParams);
+			GridMap->GridHeight = Height;
+			GridMap->GridWidth = Width;
+			UE_LOG(LogTemp, Warning, TEXT("Map spawned"));
+		}
+
+		
 		for (int y = 0; y < Height; y++)
 		{
-			Tiles.Add(FTile2DArray());
+			GridMap->Tiles.Add(FTile2DArray());
 			for (int x = 0; x < Width; x++)
 			{
 				FActorSpawnParameters ActorSpawnParams;
@@ -81,7 +72,7 @@ void ATerraFormer::TerraForm()
 				ATile* NewTile = GetWorld()->SpawnActor<ATile>(Tile, FVector(x * 200, y * 200, 0), FRotator(0, 0, 0), ActorSpawnParams);
 				NewTile->TileType = RandomizeFromMap();
 				NewTile->UpdateMaterial();
-				Tiles[y].Add(NewTile);
+				GridMap->Tiles[y].Add(NewTile);
 			}
 		}
 	}
@@ -107,7 +98,7 @@ ETileType ATerraFormer::RandomizeFromMap()
 		}
 		
 	}
-//	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("returning default")));
+	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("default tile")));
 	return ETileType::ET_Desert;
 }
 
@@ -115,14 +106,13 @@ ETileType ATerraFormer::RandomizeFromMap()
 
 void ATerraFormer::Smooth()
 {
-	//todo dynamic array
+	//TODO dynamic array
 	ETileType NewTileTypes[20][20];
-	float offset = 10000;
 	for (int y = 0; y < Height; y++)
 	{
 		for (int x = 0; x < Width; x++)
 		{
-			NewTileTypes[y][x] = TopTypeOfNeighbors(x, y);
+			NewTileTypes[y][x] = GridMap->TopTypeOfNeighbors(x, y);
 		}
 	}
 
@@ -130,8 +120,8 @@ void ATerraFormer::Smooth()
 	{
 		for (int x = 0; x < Width; x++)
 		{
-			Tiles[y][x]->TileType = NewTileTypes[y][x];
-			Tiles[y][x]->UpdateMaterial();
+			GridMap->Tiles[y][x]->TileType = NewTileTypes[y][x];
+			GridMap->Tiles[y][x]->UpdateMaterial();
 		}
 	}
 }

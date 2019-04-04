@@ -34,8 +34,19 @@ void AMurakha::Tick(float DeltaTime)
 
 }
 
-void AMurakha::UpdateLocation()
+
+void AMurakha::UpdateLocation_Implementation()
 {
+//	LocatedOn = //get new tile from map. here..?
+	if (LocatedOn)
+	{
+		//TODO add capsule and add it's half height
+		SetActorLocation(FVector(0,0, 100) + LocatedOn->GetActorLocation());
+
+	}
+	
+	//map->getTile();
+	//LocatedOn = 
 }
 
 FIntPoint AMurakha::GetGridLocation_Implementation()

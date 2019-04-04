@@ -2,6 +2,7 @@
 
 #pragma once
 #include "Tile.h"
+#include "GridMap.h"
 #include "Runtime/Core/Public/Math/UnrealMathUtility.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "CoreMinimal.h"
@@ -9,21 +10,6 @@
 #include "TerraFormer.generated.h"
 
 
-USTRUCT()
-struct FTile2DArray {
-	GENERATED_BODY()
-public:
-
-	TArray<ATile*> Ar;
-
-	ATile* operator[] (int32 i) {
-		return Ar[i];
-	}
-
-	void Add(ATile* tile) {
-		Ar.Add(tile);
-	}
-};
 
 UCLASS()
 class MURAKHY_API ATerraFormer : public AActor
@@ -44,10 +30,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Terra)
 	TSubclassOf<class ATile> Tile;
 	//	UPROPERTY(VisibleAnywhere, Category = Terra)
-		TArray<FTile2DArray> Tiles;
+	UPROPERTY(EditDefaultsOnly, Category = Terra)
+		TSubclassOf<class AGridMap> MapToSpawn;
 	
-	UFUNCTION(BlueprintCallable, Category = Terra)
-	ETileType TopTypeOfNeighbors(int tileX, int tileY);
+	AGridMap* GridMap;
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
 		void TerraForm();
@@ -57,6 +43,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
 		void Smooth();
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

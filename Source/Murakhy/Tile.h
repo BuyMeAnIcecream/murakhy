@@ -6,6 +6,7 @@
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "Runtime/Engine/Classes/Materials/Material.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Locatable.h"
 #include "Tile.generated.h"
 
 
@@ -52,7 +53,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = Tile)
 		USceneComponent* Root;
 
-
+	UPROPERTY(BlueprintReadOnly, Category = Tile)
+	TArray<TScriptInterface<ILocatable>> StoredLocatables;
 //	UPROPERTY(EditAnywhere, Category = Tile)
 //		Material
 
