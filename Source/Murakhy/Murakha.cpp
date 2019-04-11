@@ -1,13 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Murakha.h"
-
+#include "Tile.h"
+#include "GridMap.h"
+#include "Runtime/Engine/Classes/Engine/Engine.h"
 
 // Sets default values
 AMurakha::AMurakha()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -20,19 +22,90 @@ TArray<APawn*> AMurakha::ScanForPawns()
 
 }
 
+void AMurakha::Move(EDirection Direction)
+{
+	if (!GridMap)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("no GridMap assigned"));
+		return;
+	}
+
+	ATile* SteppingOn = nullptr;
+	switch (Direction)
+	{
+	case EDirection::ET_North:
+		if (GridMap->IsTileStepable(GridLocation.X, GridLocation.Y - 1))
+		{
+			GridLocation = FIntPoint(GridLocation.X, GridLocation.Y - 1);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable"));
+		}
+		break;
+	case EDirection::ET_East:
+		if (GridMap->IsTileStepable(GridLocation.X + 1, GridLocation.Y))
+		{
+			GridLocation = FIntPoint(GridLocation.X + 1, GridLocation.Y);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable")); 
+		}
+		break;
+	case EDirection::ET_South:
+		if (GridMap->IsTileStepable(GridLocation.X, GridLocation.Y + 1))
+		{
+			GridLocation = FIntPoint(GridLocation.X, GridLocation.Y + 1);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable"));
+		}
+		break;
+	case EDirection::ET_West:
+		if (GridMap->IsTileStepable(GridLocation.X - 1, GridLocation.Y))
+		{
+			GridLocation = FIntPoint(GridLocation.X - 1, GridLocation.Y);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable"));
+		}
+		break;
+	default:
+		break;
+	}
+	if (SteppingOn)
+	{
+		if (SteppingOn->IsBusy)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("tile is busy"));
+			return;
+		}
+		if (LocatedOn)
+		{
+			LocatedOn->MovedOff();
+		}
+		//TODO SteppingOn->RemoveLocatable;
+		LocatedOn = SteppingOn;
+		LocatedOn->MovedOn(this);
+			
+	}
+	UpdateLocation_Implementation();
+}
+
 // Called when the game starts or when spawned
 void AMurakha::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
-void AMurakha::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
 
 
 void AMurakha::UpdateLocation_Implementation()
@@ -41,8 +114,8 @@ void AMurakha::UpdateLocation_Implementation()
 	if (LocatedOn)
 	{
 		//TODO add capsule and add it's half height
-		SetActorLocation(FVector(0,0, 100) + LocatedOn->GetActorLocation());
-
+		SetActorLocation(FVector(0,0, 100) + LocatedOn->GetActorLocation());	
+		//LocatedOn->AddLocatable();
 	}
 	
 	//map->getTile();

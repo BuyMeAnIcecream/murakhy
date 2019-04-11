@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/Materials/Material.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Locatable.h"
+class AMurakha;
 #include "Tile.generated.h"
 
 
@@ -33,13 +34,18 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+/*
+	UPROPERTY(VisibleAnywhere, Category = Tile)
+		TArray<TScriptInterface<ILocatable*>> StoredLocatables;
+		*/
 public:
 //	UPROPERTY(EditDefaultsOnly)
 //		UMaterialInterface* Material;
 	UFUNCTION(BlueprintCallable, Category = Tile)
 		void UpdateMaterial();
 
+	UPROPERTY(VisibleAnywhere, Category = Tile)
+		bool IsBusy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 		ETileType TileType;
@@ -50,13 +56,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Tile)
 		UStaticMeshComponent* Mesh;
 
-	UPROPERTY(BlueprintReadOnly, Category = Tile)
-		USceneComponent* Root;
+	UPROPERTY(VisibleAnywhere, Category = Tile)
+		AMurakha *MurakhaOnTile;
 
 	UPROPERTY(BlueprintReadOnly, Category = Tile)
-	TArray<TScriptInterface<ILocatable>> StoredLocatables;
+		USceneComponent* Root;
+	/*
+	void AddLocatable(TScriptInterface<ILocatable> *Locatable);
+
+	void RemoveLocatable(TScriptInterface<ILocatable> *Locatable);
+	*/
+	void MovedOff();
+	
+	void MovedOn(AMurakha* Murakha);
 //	UPROPERTY(EditAnywhere, Category = Tile)
 //		Material
 
 };
-

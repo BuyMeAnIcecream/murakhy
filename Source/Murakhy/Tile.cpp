@@ -13,6 +13,7 @@ ATile::ATile()
 	RootComponent = Root;
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetMobility(EComponentMobility::Movable);
+	IsBusy = false;
 	//Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
@@ -20,12 +21,6 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	//update properties according to tile type
-	//TODO set mat
-	//switch (TileType)
-	//{
-	//}
 }
 
 void ATile::UpdateMaterial()
@@ -37,4 +32,26 @@ void ATile::UpdateMaterial()
 	}
 
 }
+void ATile::MovedOff()
+{
+	MurakhaOnTile = nullptr;
+	IsBusy = false;
+}
 
+void ATile::MovedOn(AMurakha * Murakha)
+{
+	MurakhaOnTile = Murakha;
+	IsBusy = true;
+}
+/*
+void ATile::AddLocatable(TScriptInterface<ILocatable> *Locatable)
+{
+	StoredLocatables.Add(Locatable);
+}
+
+void ATile::RemoveLocatable(TScriptInterface<ILocatable> *Locatable)
+{
+	StoredLocatables.Remove(Locatable);
+}
+
+*/

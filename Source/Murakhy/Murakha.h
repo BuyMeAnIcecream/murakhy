@@ -2,10 +2,13 @@
 
 #pragma once
 
-#include "Tile.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Locatable.h"
+
+//Normal Forward Declaration
+class AGridMap;
+
 #include "Murakha.generated.h"
 
 UENUM(BlueprintType)
@@ -34,9 +37,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Search")
 	TArray<APawn*> ScanForPawns();
 
-	ATile* LocatedOn;
-	//UPROPERTY(EditAnywhere, Category = "Location")
-		
+	UPROPERTY(VisibleAnywhere, Category = "Location")
+		class ATile* LocatedOn;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Location")
+	AGridMap* GridMap;
+	
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void Move(EDirection Direction);
+
+
 	//TODO scan area
 protected:
 	// Called when the game starts or when spawned
@@ -44,8 +54,6 @@ protected:
 
 	FIntPoint GridLocation;
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	
 //	UFUNCTION(BlueprintCallable, Category = "Location")

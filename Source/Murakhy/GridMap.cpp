@@ -1,6 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GridMap.h"
+#include "Murakha.h"
+//#include "Tile.h"
+#include "Locatable.h"
+
 
 // Sets default values
 AGridMap::AGridMap()
@@ -10,11 +14,18 @@ AGridMap::AGridMap()
 
 }
 
+// Called when the game starts or when spawned
+void AGridMap::BeginPlay()
+{
+	Super::BeginPlay();
+
+}
+
 bool AGridMap::IsTileStepable(int x, int y)
 {
 	//TODO add check if can fit
-		return  x > 0 &&
-			y > 0 &&
+		return  x >= 0 &&
+			y >= 0 &&
 			x < GridWidth &&
 			y < GridHeight;
 }
@@ -28,12 +39,49 @@ ATile * AGridMap::GetTile(int x, int y)
 	return Tiles[y][x];
 }
 
-// Called when the game starts or when spawned
-void AGridMap::BeginPlay()
+ATile * AGridMap::GetTile(FIntPoint Location)
 {
-	Super::BeginPlay();
-	
+	if (!IsTileStepable(Location.X, Location.Y) || !Tiles[Location.Y][Location.X])
+	{
+		return nullptr;
+	}
+	return Tiles[Location.Y][Location.X];
 }
+
+APawn* AGridMap::SpawnMurakha(FIntPoint Location)
+{
+	APawn* Spawn = nullptr;
+	if (PawnToSpawn)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);		//TODO save to game manager to call updates
+	
+		ILocatable* Locatable = Cast<ILocatable>(Spawn);
+		if (Locatable)
+		{
+			//Don't call your functions directly, use the 'Execute_' prefix
+			//the Execute_ReactToHighNoon and Execute_ReactToMidnight are generated on compile
+			//you may need to compile before these functions will appear
+			Locatable->Execute_SetGridLocation(Cast<UObject>(Locatable),Location);
+			Locatable->Execute_UpdateLocation(Cast<UObject>(Locatable));
+		}
+		
+		AMurakha *SpawnedMurakha = Cast<AMurakha>(Spawn);
+		if (SpawnedMurakha)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("gridmap added"));
+			SpawnedMurakha->GridMap = this;
+			SpawnedMurakha->LocatedOn = GetTile(Location);
+			
+		}
+		
+	}
+	return Spawn;
+}
+
+
 
 ETileType AGridMap::TopTypeOfNeighbors(int tileX, int tileY)
 {

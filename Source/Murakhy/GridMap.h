@@ -2,10 +2,11 @@
 
 #pragma once
 
-#include "Tile.h"
+
 #include "Runtime/Core/Public/Math/UnrealMathUtility.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Tile.h"
 #include "GridMap.generated.h"
 
 USTRUCT()
@@ -15,7 +16,8 @@ public:
 
 	TArray<ATile*> Ar;
 
-	ATile* operator[] (int32 i) {
+	ATile* operator[] (int32 i) 
+	{
 		return Ar[i];
 	}
 
@@ -46,6 +48,16 @@ public:
 	bool IsTileStepable(int x, int y);
 
 	ATile* GetTile(int x, int y);
+
+	ATile* GetTile(FIntPoint Location);
+
+//	UPROPERTY(EditDefaultsOnly, Category = Spawn)
+	//TODO Move to Spawner
+	UFUNCTION(BlueprintCallable, Category = Spawn)
+		APawn* SpawnMurakha(FIntPoint Location);
+	//TODO spawnAt(tile to spawn at)
+	UPROPERTY(EditDefaultsOnly, Category = Spawn)
+		TSubclassOf<class APawn> PawnToSpawn;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
