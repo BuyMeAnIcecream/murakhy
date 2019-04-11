@@ -58,16 +58,6 @@ APawn* AGridMap::SpawnMurakha(FIntPoint Location)
 
 		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);		//TODO save to game manager to call updates
 	
-		ILocatable* Locatable = Cast<ILocatable>(Spawn);
-		if (Locatable)
-		{
-			//Don't call your functions directly, use the 'Execute_' prefix
-			//the Execute_ReactToHighNoon and Execute_ReactToMidnight are generated on compile
-			//you may need to compile before these functions will appear
-			Locatable->Execute_SetGridLocation(Cast<UObject>(Locatable),Location);
-			Locatable->Execute_UpdateLocation(Cast<UObject>(Locatable));
-		}
-		
 		AMurakha *SpawnedMurakha = Cast<AMurakha>(Spawn);
 		if (SpawnedMurakha)
 		{
@@ -76,6 +66,17 @@ APawn* AGridMap::SpawnMurakha(FIntPoint Location)
 			SpawnedMurakha->LocatedOn = GetTile(Location);
 			
 		}
+
+		ILocatable* Locatable = Cast<ILocatable>(Spawn);
+		if (Locatable)
+		{
+			//Don't call your functions directly, use the 'Execute_' prefix
+			//the Execute_ReactToHighNoon and Execute_ReactToMidnight are generated on compile
+			//you may need to compile before these functions will appear
+			Locatable->Execute_SetGridLocation(Cast<UObject>(Locatable), Location);
+			Locatable->Execute_UpdateLocation(Cast<UObject>(Locatable));
+		}
+
 		
 	}
 	return Spawn;

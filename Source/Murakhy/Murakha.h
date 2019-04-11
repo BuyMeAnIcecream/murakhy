@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Locatable.h"
+#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 //Normal Forward Declaration
 class AGridMap;
@@ -33,19 +34,25 @@ public:
 
 //	UPROPERTY(EditAnywhere, Category = "Location")
 	UPROPERTY(EditAnywhere, Category = "Behavior")
-		class UBehaviorTree *Behavior;
+	class UBehaviorTree *Behavior;
+
 	UFUNCTION(BlueprintCallable, Category = "Search")
 	TArray<APawn*> ScanForPawns();
 
 	UPROPERTY(VisibleAnywhere, Category = "Location")
-		class ATile* LocatedOn;
+	class ATile* LocatedOn;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Location")
 	AGridMap* GridMap;
 	
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-		void Move(EDirection Direction);
+	void Move(EDirection Direction);
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	UStaticMeshComponent *Mesh;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Root")
+	USceneComponent* Root;
 
 	//TODO scan area
 protected:

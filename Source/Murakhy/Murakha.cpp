@@ -11,6 +11,11 @@ AMurakha::AMurakha()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetMobility(EComponentMobility::Movable);
 }
 
 TArray<APawn*> AMurakha::ScanForPawns()
@@ -114,7 +119,7 @@ void AMurakha::UpdateLocation_Implementation()
 	if (LocatedOn)
 	{
 		//TODO add capsule and add it's half height
-		SetActorLocation(FVector(0,0, 100) + LocatedOn->GetActorLocation());	
+		SetActorLocation(FVector(0,0, 200) + LocatedOn->GetActorLocation());	
 		//LocatedOn->AddLocatable();
 	}
 	
