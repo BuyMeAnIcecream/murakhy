@@ -8,6 +8,7 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Locatable.h"
 class AMurakha;
+enum class EBioParameter : uint8;
 #include "Tile.generated.h"
 
 

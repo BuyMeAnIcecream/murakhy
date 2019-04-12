@@ -20,8 +20,28 @@ enum class EDirection : uint8
 	ET_South UMETA(DisplayName = "South"),
 	ET_West UMETA(DisplayName = "West"),
 	ET_END
-
 };
+
+UENUM(BlueprintType)
+enum class EBioParameter : uint8
+{
+	EBP_Food UMETA(DisplayName = "Food"),
+	EBP_Dna UMETA(DisplayName = "DNA"),
+	EBP_Light UMETA(DisplayName = "Light"),
+	EBP_END
+};
+
+USTRUCT()
+struct FParamValues
+{
+	GENERATED_BODY()
+
+	uint8 Current;
+	uint8 Max;
+	uint8 Sufficient;
+	uint8 ConsumesInTurn;
+};
+	
 
 UCLASS()
 class MURAKHY_API AMurakha : public APawn, public ILocatable
@@ -33,6 +53,7 @@ public:
 	AMurakha();
 
 //	UPROPERTY(EditAnywhere, Category = "Location")
+
 	UPROPERTY(EditAnywhere, Category = "Behavior")
 	class UBehaviorTree *Behavior;
 
@@ -54,6 +75,12 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Root")
 	USceneComponent* Root;
 
+	UPROPERTY(EditDefaultsOnly, Category = "BioParameters")
+		TMap<EBioParameter, FParamValues> BioParams;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Eat")
+		void Consume(EBioParameter BioParam, uint8 &Available);
 	//TODO scan area
 protected:
 	// Called when the game starts or when spawned

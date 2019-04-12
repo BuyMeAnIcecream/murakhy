@@ -22,7 +22,6 @@ TArray<APawn*> AMurakha::ScanForPawns()
 {
 	TArray<APawn*> Pawns;
 
-
 	return Pawns;
 
 }
@@ -102,6 +101,29 @@ void AMurakha::Move(EDirection Direction)
 			
 	}
 	UpdateLocation_Implementation();
+}
+
+void AMurakha::Consume(EBioParameter BioParam, uint8 &Available)
+{
+	//check if we have more than can consume
+	uint8 ToBeConsumed = 0;
+	if (Available <= BioParams[BioParam].ConsumesInTurn)
+	{
+		ToBeConsumed = Available;
+	}
+	else
+	{
+		ToBeConsumed = BioParams[BioParam].ConsumesInTurn;
+	}
+	
+	//check if we need less to fill param
+	if (BioParams[BioParam].Current + ToBeConsumed > BioParams[BioParam].Max)
+	{
+		ToBeConsumed = BioParams[BioParam].Max - BioParams[BioParam].Current;
+	}
+	
+	BioParams[BioParam].Current += ToBeConsumed;
+	Available -= ToBeConsumed;
 }
 
 // Called when the game starts or when spawned
