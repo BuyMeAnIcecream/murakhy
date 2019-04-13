@@ -21,9 +21,7 @@ AMurakha::AMurakha()
 TArray<APawn*> AMurakha::ScanForPawns()
 {
 	TArray<APawn*> Pawns;
-
 	return Pawns;
-
 }
 
 void AMurakha::Move(EDirection Direction)
@@ -144,9 +142,6 @@ void AMurakha::UpdateLocation_Implementation()
 		SetActorLocation(FVector(0,0, 200) + LocatedOn->GetActorLocation());	
 		//LocatedOn->AddLocatable();
 	}
-	
-	//map->getTile();
-	//LocatedOn = 
 }
 
 FIntPoint AMurakha::GetGridLocation_Implementation()

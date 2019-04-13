@@ -7,8 +7,9 @@
 #include "Runtime/Engine/Classes/Materials/Material.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Locatable.h"
+#include "Updatable.h"
 class AMurakha;
-enum class EBioParameter : uint8;
+#include "EBioParameter.h"
 #include "Tile.generated.h"
 
 
@@ -22,9 +23,23 @@ enum class ETileType : uint8
 	ET_END
 };
 
+USTRUCT(BlueprintType)
+struct FConsumableData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category = Data)
+	EBioParameter TypeProduced;
+
+	UPROPERTY(EditDefaultsOnly, Category = Data)
+	uint8 ConsumableMax;
+
+	UPROPERTY(EditDefaultsOnly, Category = Data)
+	uint8 AmountProducedPerTurn;
+};
 
 UCLASS()
-class MURAKHY_API ATile : public AActor
+class MURAKHY_API ATile : public AActor, public IUpdatable
 {
 	GENERATED_BODY()
 	
@@ -39,6 +54,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Tile)
 		TArray<TScriptInterface<ILocatable*>> StoredLocatables;
 		*/
+
 public:
 //	UPROPERTY(EditDefaultsOnly)
 //		UMaterialInterface* Material;
@@ -52,7 +68,7 @@ public:
 		ETileType TileType;
 
 	UPROPERTY(EditDefaultsOnly, Category = Tile)
-	TMap<ETileType, UMaterial*> MaterialMap;
+		TMap<ETileType, UMaterial*> MaterialMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = Tile)
 		UStaticMeshComponent* Mesh;
@@ -62,15 +78,34 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = Tile)
 		USceneComponent* Root;
+
+//	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
+//		TMap<ETileType, EBioParameter> TypeProduced;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
+		TMap<ETileType, FConsumableData> ConsumableInfo;
+
+	//UPROPERTY(EditDefaultsOnly, Category = Consumable)
+	//	TMap<EBioParameter, uint8> AmountProduced;
+
+	UPROPERTY(EditDefaultsOnly, Category = Consumable)
+		uint8 ConsumableCurrent;
 	/*
 	void AddLocatable(TScriptInterface<ILocatable> *Locatable);
 
 	void RemoveLocatable(TScriptInterface<ILocatable> *Locatable);
 	*/
+
+	UFUNCTION(BlueprintCallable, Category = Consumable)
+		void ProduceConsumable();
+
 	void MovedOff();
 	
 	void MovedOn(AMurakha* Murakha);
-//	UPROPERTY(EditAnywhere, Category = Tile)
-//		Material
+
+public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
+		void UpdateOnTurn();
+	virtual void UpdateOnTurn_Implementation() override;
 
 };

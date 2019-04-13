@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Locatable.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "EBioParameter.h"
 
 //Normal Forward Declaration
 class AGridMap;
@@ -22,23 +23,21 @@ enum class EDirection : uint8
 	ET_END
 };
 
-UENUM(BlueprintType)
-enum class EBioParameter : uint8
-{
-	EBP_Food UMETA(DisplayName = "Food"),
-	EBP_Dna UMETA(DisplayName = "DNA"),
-	EBP_Light UMETA(DisplayName = "Light"),
-	EBP_END
-};
-
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FParamValues
 {
 	GENERATED_BODY()
-
-	uint8 Current;
+		
+	UPROPERTY(VisibleAnywhere, Category = Data)
+	uint8 Current; //TODO move out of struct. keep struct as db
+	
+	UPROPERTY(EditDefaultsOnly, Category = Data)
 	uint8 Max;
+	
+	UPROPERTY(EditDefaultsOnly, Category = Data)
 	uint8 Sufficient;
+	
+	UPROPERTY(EditDefaultsOnly, Category = Data)
 	uint8 ConsumesInTurn;
 };
 	
@@ -79,7 +78,7 @@ public:
 		TMap<EBioParameter, FParamValues> BioParams;
 
 
-	UFUNCTION(BlueprintCallable, Category = "Eat")
+	UFUNCTION(BlueprintCallable, Category = "Consume")
 		void Consume(EBioParameter BioParam, uint8 &Available);
 	//TODO scan area
 protected:

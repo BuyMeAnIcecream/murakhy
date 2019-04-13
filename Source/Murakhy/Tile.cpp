@@ -32,8 +32,28 @@ void ATile::UpdateMaterial()
 	{
 		Mesh->SetMaterial(0, mat);
 	}
-
 }
+
+
+void ATile::ProduceConsumable()
+{
+	if (!ConsumableInfo.Contains(TileType))
+	{
+		return;
+	}
+
+	FConsumableData ConsData = ConsumableInfo[TileType];
+	
+	if(ConsumableCurrent < ConsData.ConsumableMax)
+	{
+		ConsumableCurrent += ConsData.AmountProducedPerTurn;
+		if (ConsumableCurrent > ConsData.ConsumableMax)
+		{
+			ConsumableCurrent = ConsData.ConsumableMax;
+		}
+	}
+}
+
 void ATile::MovedOff()
 {
 	MurakhaOnTile = nullptr;
@@ -44,6 +64,10 @@ void ATile::MovedOn(AMurakha * Murakha)
 {
 	MurakhaOnTile = Murakha;
 	IsBusy = true;
+}
+void ATile::UpdateOnTurn_Implementation()
+{
+
 }
 /*
 void ATile::AddLocatable(TScriptInterface<ILocatable> *Locatable)
