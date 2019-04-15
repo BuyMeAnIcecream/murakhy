@@ -39,13 +39,15 @@ public:
 	TArray<FTile2DArray> Tiles;
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
-		ETileType TopTypeOfNeighbors(int tileX, int tileY);
+		ETileType TopTypeOfNeighbors(int TileX, int TileY);
+
 	UPROPERTY(VisibleAnywhere, Category = Terra)
 		int32 GridWidth;
+
 	UPROPERTY(VisibleAnywhere, Category = Terra)
 		int32 GridHeight;
 
-	bool IsTileStepable(int x, int y);
+	bool CanBeStepped(int x, int y) const;
 
 	ATile* GetTile(int x, int y);
 
@@ -55,9 +57,11 @@ public:
 	//TODO Move to Spawner
 	UFUNCTION(BlueprintCallable, Category = Spawn)
 		APawn* SpawnMurakha(FIntPoint Location);
+
 	//TODO spawnAt(tile to spawn at)
 	UPROPERTY(EditDefaultsOnly, Category = Spawn)
 		TSubclassOf<class APawn> PawnToSpawn;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

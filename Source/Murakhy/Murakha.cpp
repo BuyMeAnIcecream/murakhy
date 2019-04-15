@@ -36,7 +36,7 @@ void AMurakha::Move(EDirection Direction)
 	switch (Direction)
 	{
 	case EDirection::ET_North:
-		if (GridMap->IsTileStepable(GridLocation.X, GridLocation.Y - 1))
+		if (GridMap->CanBeStepped(GridLocation.X, GridLocation.Y - 1))
 		{
 			GridLocation = FIntPoint(GridLocation.X, GridLocation.Y - 1);
 			SteppingOn = GridMap->GetTile(GridLocation);
@@ -47,7 +47,7 @@ void AMurakha::Move(EDirection Direction)
 		}
 		break;
 	case EDirection::ET_East:
-		if (GridMap->IsTileStepable(GridLocation.X + 1, GridLocation.Y))
+		if (GridMap->CanBeStepped(GridLocation.X + 1, GridLocation.Y))
 		{
 			GridLocation = FIntPoint(GridLocation.X + 1, GridLocation.Y);
 			SteppingOn = GridMap->GetTile(GridLocation);
@@ -58,7 +58,7 @@ void AMurakha::Move(EDirection Direction)
 		}
 		break;
 	case EDirection::ET_South:
-		if (GridMap->IsTileStepable(GridLocation.X, GridLocation.Y + 1))
+		if (GridMap->CanBeStepped(GridLocation.X, GridLocation.Y + 1))
 		{
 			GridLocation = FIntPoint(GridLocation.X, GridLocation.Y + 1);
 			SteppingOn = GridMap->GetTile(GridLocation);
@@ -69,7 +69,7 @@ void AMurakha::Move(EDirection Direction)
 		}
 		break;
 	case EDirection::ET_West:
-		if (GridMap->IsTileStepable(GridLocation.X - 1, GridLocation.Y))
+		if (GridMap->CanBeStepped(GridLocation.X - 1, GridLocation.Y))
 		{
 			GridLocation = FIntPoint(GridLocation.X - 1, GridLocation.Y);
 			SteppingOn = GridMap->GetTile(GridLocation);
@@ -84,6 +84,7 @@ void AMurakha::Move(EDirection Direction)
 	}
 	if (SteppingOn)
 	{
+		//TODO this is a breaking bug, sir. Check if busy before updating GridLocation
 		if (SteppingOn->IsBusy)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("tile is busy"));
@@ -93,7 +94,6 @@ void AMurakha::Move(EDirection Direction)
 		{
 			LocatedOn->MovedOff();
 		}
-		//TODO SteppingOn->RemoveLocatable;
 		LocatedOn = SteppingOn;
 		LocatedOn->MovedOn(this);
 			
@@ -101,7 +101,7 @@ void AMurakha::Move(EDirection Direction)
 	UpdateLocation_Implementation();
 }
 
-void AMurakha::Consume(EBioParameter BioParam, uint8 &Available)
+void AMurakha::Consume(const EBioParameter BioParam, uint8 &Available)
 {
 	//check if we have more than can consume
 	uint8 ToBeConsumed = 0;

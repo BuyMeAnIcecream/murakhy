@@ -6,6 +6,7 @@
 #include "Runtime/Core/Public/Math/UnrealMathUtility.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "CoreMinimal.h"
+#include "TurnManager.h"
 //#include "GameFramework/Actor.h"
 #include "TerraFormer.generated.h"
 
@@ -36,14 +37,16 @@ public:
 	AGridMap* GridMap;
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
-		void TerraForm();
+	void TerraForm();
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
 	ETileType RandomizeFromMap();
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
-		void Smooth();
+	void Smooth();
 
+	UPROPERTY(EditInstanceOnly, Category = TurnManager)
+	ATurnManager *TurnManager;
 
 protected:
 	// Called when the game starts or when spawned

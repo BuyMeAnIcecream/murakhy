@@ -4,8 +4,6 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Engine/Engine.h"
 
-//TODO SPLIT TerraFormer and map
-
 // Sets default values
 ATerraFormer::ATerraFormer()
 {
@@ -73,6 +71,11 @@ void ATerraFormer::TerraForm()
 				NewTile->TileType = RandomizeFromMap();
 				NewTile->UpdateMaterial();
 				GridMap->Tiles[y].Add(NewTile);
+				//add to updatable array
+				if (TurnManager)
+				{ 
+					TurnManager->AddUpdatable(NewTile);
+				}
 			}
 		}
 	}
@@ -93,7 +96,6 @@ ETileType ATerraFormer::RandomizeFromMap()
 		currentLikelihood += Elem.Value;
 		if (randValue < currentLikelihood)
 		{
-//			GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("current Like:  %f tile sorted number %d tile like: %f, rand val: %f"), currentLikelihood, (int)Elem.Key, Elem.Value, randValue));
 			return Elem.Key;
 		}
 		

@@ -21,7 +21,7 @@ void AGridMap::BeginPlay()
 
 }
 
-bool AGridMap::IsTileStepable(int x, int y)
+bool AGridMap::CanBeStepped(const int x, const int y) const
 {
 	//TODO add check if can fit
 		return  x >= 0 &&
@@ -30,25 +30,25 @@ bool AGridMap::IsTileStepable(int x, int y)
 			y < GridHeight;
 }
 
-ATile * AGridMap::GetTile(int x, int y)
+ATile * AGridMap::GetTile(const int x, const int y)
 {
-	if (!IsTileStepable(x, y) || !Tiles[y][x])
+	if (!CanBeStepped(x, y) || !Tiles[y][x])
 	{
 		return nullptr;
 	}
 	return Tiles[y][x];
 }
 
-ATile * AGridMap::GetTile(FIntPoint Location)
+ATile * AGridMap::GetTile(const FIntPoint Location)
 {
-	if (!IsTileStepable(Location.X, Location.Y) || !Tiles[Location.Y][Location.X])
+	if (!CanBeStepped(Location.X, Location.Y) || !Tiles[Location.Y][Location.X])
 	{
 		return nullptr;
 	}
 	return Tiles[Location.Y][Location.X];
 }
 
-APawn* AGridMap::SpawnMurakha(FIntPoint Location)
+APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 {
 	APawn* Spawn = nullptr;
 	if (PawnToSpawn)
@@ -56,7 +56,7 @@ APawn* AGridMap::SpawnMurakha(FIntPoint Location)
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);		//TODO save to game manager to call updates
+		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);		//TODO save to turn manager to call updates
 	
 		AMurakha *SpawnedMurakha = Cast<AMurakha>(Spawn);
 		if (SpawnedMurakha)
@@ -70,42 +70,37 @@ APawn* AGridMap::SpawnMurakha(FIntPoint Location)
 		ILocatable* Locatable = Cast<ILocatable>(Spawn);
 		if (Locatable)
 		{
-			//Don't call your functions directly, use the 'Execute_' prefix
-			//the Execute_ReactToHighNoon and Execute_ReactToMidnight are generated on compile
-			//you may need to compile before these functions will appear
 			Locatable->Execute_SetGridLocation(Cast<UObject>(Locatable), Location);
 			Locatable->Execute_UpdateLocation(Cast<UObject>(Locatable));
 		}
-
-		
 	}
 	return Spawn;
 }
 
 
 
-ETileType AGridMap::TopTypeOfNeighbors(int tileX, int tileY)
+ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)
 {
-	TArray<int> times;
+	TArray<int> Times;
 
-	times.Init(0, (int)ETileType::ET_END);
+	Times.Init(0, (int)ETileType::ET_End);
 
-	for (int i = tileY - 1; i < tileY + 2; ++i)
+	for (int i = TileY - 1; i < TileY + 2; ++i)
 	{
-		for (int j = tileX - 1; j < tileX + 2; ++j)
+		for (int j = TileX - 1; j < TileX + 2; ++j)
 		{
 			if (i >= 0 &&
 				j >= 0 &&
 				i < GridHeight &&
 				j < GridWidth)
 			{
-				if (tileX == j && tileY == i)
+				if (TileX == j && TileY == i)
 				{
 					continue;
 				}
 				//				UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);
-				ETileType currentType = Tiles[i][j]->TileType;
-				times[(int)currentType] = times[(int)currentType] + 1;
+				ETileType CurrentType = Tiles[i][j]->TileType;
+				Times[(int)CurrentType] = Times[(int)CurrentType] + 1;
 				//				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("X  = %d Y = %d"), j, i));	
 			}
 		}
@@ -114,11 +109,11 @@ ETileType AGridMap::TopTypeOfNeighbors(int tileX, int tileY)
 	//this should be a map for sure
 	int mostTimesIndex = 0;
 	int mostTimes = 0;
-	for (int i = 0; i < times.Num(); i++) {
+	for (int i = 0; i < Times.Num(); i++) {
 		//don't care what it returns if there are 2 or more equal results
-		if (mostTimes < times[i])
+		if (mostTimes < Times[i])
 		{
-			mostTimes = times[i];
+			mostTimes = Times[i];
 			mostTimesIndex = i;
 		}
 		//		UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);

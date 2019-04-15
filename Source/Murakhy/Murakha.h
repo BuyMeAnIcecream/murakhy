@@ -57,7 +57,7 @@ public:
 	class UBehaviorTree *Behavior;
 
 	UFUNCTION(BlueprintCallable, Category = "Search")
-	TArray<APawn*> ScanForPawns();
+	static TArray<APawn*> ScanForPawns();
 
 	UPROPERTY(VisibleAnywhere, Category = "Location")
 	class ATile* LocatedOn;

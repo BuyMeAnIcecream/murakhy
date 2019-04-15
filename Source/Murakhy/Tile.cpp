@@ -42,11 +42,11 @@ void ATile::ProduceConsumable()
 		return;
 	}
 
-	FConsumableData ConsData = ConsumableInfo[TileType];
+	const FConsumableData ConsData = ConsumableInfo[TileType];
 	
 	if(ConsumableCurrent < ConsData.ConsumableMax)
 	{
-		ConsumableCurrent += ConsData.AmountProducedPerTurn;
+		ConsumableCurrent += ConsData.AmountProducedPerTurn + FMath::RandRange(0, ConsData.RandomExtraProducedPerTurn);
 		if (ConsumableCurrent > ConsData.ConsumableMax)
 		{
 			ConsumableCurrent = ConsData.ConsumableMax;
@@ -67,7 +67,7 @@ void ATile::MovedOn(AMurakha * Murakha)
 }
 void ATile::UpdateOnTurn_Implementation()
 {
-
+	ProduceConsumable();
 }
 /*
 void ATile::AddLocatable(TScriptInterface<ILocatable> *Locatable)

@@ -20,7 +20,7 @@ enum class ETileType : uint8
 	ET_Desert UMETA(DisplayName = "Desert"),
 	ET_Evil	UMETA(DisplayName = "Glow"),
 	ET_Snow UMETA(DisplayName = "Snow"),
-	ET_END
+	ET_End
 };
 
 USTRUCT(BlueprintType)
@@ -36,6 +36,9 @@ struct FConsumableData
 
 	UPROPERTY(EditDefaultsOnly, Category = Data)
 	uint8 AmountProducedPerTurn;
+
+	UPROPERTY(EditDefaultsOnly, Category = Data)
+	uint8 RandomExtraProducedPerTurn;
 };
 
 UCLASS()
@@ -56,40 +59,32 @@ protected:
 		*/
 
 public:
-//	UPROPERTY(EditDefaultsOnly)
-//		UMaterialInterface* Material;
 	UFUNCTION(BlueprintCallable, Category = Tile)
-		void UpdateMaterial();
+	void UpdateMaterial();
 
 	UPROPERTY(VisibleAnywhere, Category = Tile)
-		bool IsBusy;
+	bool IsBusy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
-		ETileType TileType;
+	ETileType TileType;
 
 	UPROPERTY(EditDefaultsOnly, Category = Tile)
-		TMap<ETileType, UMaterial*> MaterialMap;
+	TMap<ETileType, UMaterial*> MaterialMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = Tile)
-		UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere, Category = Tile)
-		AMurakha *MurakhaOnTile;
+	AMurakha *MurakhaOnTile;
 
 	UPROPERTY(BlueprintReadOnly, Category = Tile)
-		USceneComponent* Root;
-
-//	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
-//		TMap<ETileType, EBioParameter> TypeProduced;
+	USceneComponent* Root;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
-		TMap<ETileType, FConsumableData> ConsumableInfo;
+	TMap<ETileType, FConsumableData> ConsumableInfo;
 
-	//UPROPERTY(EditDefaultsOnly, Category = Consumable)
-	//	TMap<EBioParameter, uint8> AmountProduced;
-
-	UPROPERTY(EditDefaultsOnly, Category = Consumable)
-		uint8 ConsumableCurrent;
+	UPROPERTY(VisibleAnywhere, Category = Consumable)
+	uint8 ConsumableCurrent;
 	/*
 	void AddLocatable(TScriptInterface<ILocatable> *Locatable);
 
@@ -97,7 +92,7 @@ public:
 	*/
 
 	UFUNCTION(BlueprintCallable, Category = Consumable)
-		void ProduceConsumable();
+	void ProduceConsumable();
 
 	void MovedOff();
 	
@@ -105,7 +100,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
-		void UpdateOnTurn();
+	void UpdateOnTurn();
 	virtual void UpdateOnTurn_Implementation() override;
 
 };
