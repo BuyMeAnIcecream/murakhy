@@ -21,7 +21,7 @@ void AGridMap::BeginPlay()
 
 }
 
-bool AGridMap::CanBeStepped(const int x, const int y) const
+bool AGridMap::IsInBounds(const int x, const int y) const
 {
 	//TODO add check if can fit
 		return  x >= 0 &&
@@ -32,7 +32,7 @@ bool AGridMap::CanBeStepped(const int x, const int y) const
 
 ATile * AGridMap::GetTile(const int x, const int y)
 {
-	if (!CanBeStepped(x, y) || !Tiles[y][x])
+	if (!IsInBounds(x, y) || !Tiles[y][x])
 	{
 		return nullptr;
 	}
@@ -41,7 +41,7 @@ ATile * AGridMap::GetTile(const int x, const int y)
 
 ATile * AGridMap::GetTile(const FIntPoint Location)
 {
-	if (!CanBeStepped(Location.X, Location.Y) || !Tiles[Location.Y][Location.X])
+	if (!IsInBounds(Location.X, Location.Y) || !Tiles[Location.Y][Location.X])
 	{
 		return nullptr;
 	}

@@ -40,14 +40,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
 		ETileType TopTypeOfNeighbors(int TileX, int TileY);
-
+	
 	UPROPERTY(VisibleAnywhere, Category = Terra)
 		int32 GridWidth;
 
 	UPROPERTY(VisibleAnywhere, Category = Terra)
 		int32 GridHeight;
 
-	bool CanBeStepped(int x, int y) const;
+	bool IsInBounds(int x, int y) const;
 
 	ATile* GetTile(int x, int y);
 

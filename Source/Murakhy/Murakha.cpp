@@ -36,47 +36,51 @@ void AMurakha::Move(EDirection Direction)
 	switch (Direction)
 	{
 	case EDirection::ET_North:
-		if (GridMap->CanBeStepped(GridLocation.X, GridLocation.Y - 1))
+		if (GridMap->IsInBounds(GridLocation.X, GridLocation.Y - 1) &&
+			!GridMap->GetTile(GridLocation.X, GridLocation.Y - 1)->IsBusy)
 		{
 			GridLocation = FIntPoint(GridLocation.X, GridLocation.Y - 1);
 			SteppingOn = GridMap->GetTile(GridLocation);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable"));
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
 		}
 		break;
 	case EDirection::ET_East:
-		if (GridMap->CanBeStepped(GridLocation.X + 1, GridLocation.Y))
+		if (GridMap->IsInBounds(GridLocation.X + 1, GridLocation.Y) &&
+			!GridMap->GetTile(GridLocation.X + 1, GridLocation.Y)->IsBusy)
 		{
 			GridLocation = FIntPoint(GridLocation.X + 1, GridLocation.Y);
 			SteppingOn = GridMap->GetTile(GridLocation);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable")); 
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
 		}
 		break;
 	case EDirection::ET_South:
-		if (GridMap->CanBeStepped(GridLocation.X, GridLocation.Y + 1))
+		if (GridMap->IsInBounds(GridLocation.X, GridLocation.Y + 1) &&
+			!GridMap->GetTile(GridLocation.X, GridLocation.Y + 1)->IsBusy)
 		{
 			GridLocation = FIntPoint(GridLocation.X, GridLocation.Y + 1);
 			SteppingOn = GridMap->GetTile(GridLocation);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable"));
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
 		}
 		break;
 	case EDirection::ET_West:
-		if (GridMap->CanBeStepped(GridLocation.X - 1, GridLocation.Y))
+		if (GridMap->IsInBounds(GridLocation.X - 1, GridLocation.Y) &&
+			!GridMap->GetTile(GridLocation.X - 1, GridLocation.Y)->IsBusy)
 		{
 			GridLocation = FIntPoint(GridLocation.X - 1, GridLocation.Y);
 			SteppingOn = GridMap->GetTile(GridLocation);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("terrain not stepable"));
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
 		}
 		break;
 	default:
@@ -84,12 +88,6 @@ void AMurakha::Move(EDirection Direction)
 	}
 	if (SteppingOn)
 	{
-		//TODO this is a breaking bug, sir. Check if busy before updating GridLocation
-		if (SteppingOn->IsBusy)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("tile is busy"));
-			return;
-		}
 		if (LocatedOn)
 		{
 			LocatedOn->MovedOff();
