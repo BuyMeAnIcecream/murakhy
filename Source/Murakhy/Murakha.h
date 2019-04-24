@@ -66,7 +66,7 @@ public:
 	AGridMap* GridMap;
 	
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void Move(EDirection Direction);
+	bool Move(EDirection Direction);
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent *Mesh;

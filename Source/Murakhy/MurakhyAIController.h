@@ -8,24 +8,39 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyAllTypes.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Updatable.h"
 #include "MurakhyAIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MURAKHY_API AMurakhyAIController : public AAIController
+class MURAKHY_API AMurakhyAIController : public AAIController, public IUpdatable
 {
 	GENERATED_BODY()
 
-		UPROPERTY(transient)
-		class UBlackboardComponent* BlackboardComp;
+	UPROPERTY(transient)
+	class UBlackboardComponent* BlackboardComp;
 
 	UPROPERTY(transient)
-		class UBehaviorTreeComponent* BehaviorTreeComp;
+	class UBehaviorTreeComponent* BehaviorTreeComp;
+
+	virtual void BeginPlay() override;
 public:
 	AMurakhyAIController();
 
 	virtual void Possess(APawn* InPawn) override;
-	uint8 MurakhaKeyID;
+	//uint8 BioPriorityID;
+	FBlackboard::FKey BioPriorityID;
+	FBlackboard::FKey TurnCompleteID;
+	//const bool& GetIsTurnComplete() const { return IsTurnComplete; }
+	//void SetIsTurnComplete(const bool& itc) { IsTurnComplete = itc; }
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
+		void UpdateOnTurn();
+	virtual void UpdateOnTurn_Implementation() override;
+//private:
+	//UPROPERTY(VisibleInstanceOnly, Category = "Turn")
+	//bool IsTurnComplete;
+
 };

@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Tile.h"
+#include "TurnManager.h"
 #include "GridMap.generated.h"
 
 USTRUCT()
@@ -61,6 +62,9 @@ public:
 	//TODO spawnAt(tile to spawn at)
 	UPROPERTY(EditDefaultsOnly, Category = Spawn)
 		TSubclassOf<class APawn> PawnToSpawn;
+
+	UPROPERTY(VisibleAnywhere, Category = TurnManager)
+		ATurnManager *TurnManager;
 
 protected:
 	// Called when the game starts or when spawned

@@ -4,6 +4,8 @@
 #include "Murakha.h"
 //#include "Tile.h"
 #include "Locatable.h"
+#include "MurakhyAIController.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -19,6 +21,19 @@ void AGridMap::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Find TM
+	TArray<AActor*> Found;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurnManager::StaticClass(), Found);
+	ATurnManager* TM = Cast<ATurnManager>(Found.Pop());
+	if(TM)
+	{
+		TurnManager = TM;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Turn Manager Not Found"));
+	}
+	
 }
 
 bool AGridMap::IsInBounds(const int x, const int y) const
@@ -64,14 +79,22 @@ APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 			UE_LOG(LogTemp, Warning, TEXT("gridmap added"));
 			SpawnedMurakha->GridMap = this;
 			SpawnedMurakha->LocatedOn = GetTile(Location);
-			
-		}
 
-		ILocatable* Locatable = Cast<ILocatable>(Spawn);
-		if (Locatable)
-		{
-			Locatable->Execute_SetGridLocation(Cast<UObject>(Locatable), Location);
-			Locatable->Execute_UpdateLocation(Cast<UObject>(Locatable));
+			ILocatable* Locatable = Cast<ILocatable>(Spawn);
+			if (Locatable)
+			{
+				Locatable->Execute_SetGridLocation(Cast<UObject>(Locatable), Location);
+				Locatable->Execute_UpdateLocation(Cast<UObject>(Locatable));
+			}
+
+			AMurakhyAIController *AIController = Cast<AMurakhyAIController>(SpawnedMurakha->GetController());
+			if(AIController)
+			{
+				if(TurnManager)
+				{
+					TurnManager->AddUpdatable(AIController);
+				}
+			}
 		}
 	}
 	return Spawn;

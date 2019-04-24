@@ -24,12 +24,12 @@ TArray<APawn*> AMurakha::ScanForPawns()
 	return Pawns;
 }
 
-void AMurakha::Move(EDirection Direction)
+bool AMurakha::Move(EDirection Direction)
 {
 	if (!GridMap)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("no GridMap assigned"));
-		return;
+		return false;
 	}
 
 	ATile* SteppingOn = nullptr;
@@ -45,6 +45,7 @@ void AMurakha::Move(EDirection Direction)
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
 		}
 		break;
 	case EDirection::ET_East:
@@ -57,6 +58,7 @@ void AMurakha::Move(EDirection Direction)
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
 		}
 		break;
 	case EDirection::ET_South:
@@ -69,6 +71,7 @@ void AMurakha::Move(EDirection Direction)
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
 		}
 		break;
 	case EDirection::ET_West:
@@ -81,6 +84,7 @@ void AMurakha::Move(EDirection Direction)
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
 		}
 		break;
 	default:
@@ -96,7 +100,9 @@ void AMurakha::Move(EDirection Direction)
 		LocatedOn->MovedOn(this);
 			
 	}
+	
 	UpdateLocation_Implementation();
+	return true;
 }
 
 void AMurakha::Consume(const EBioParameter BioParam, uint8 &Available)
