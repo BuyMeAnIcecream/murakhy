@@ -27,6 +27,7 @@ void AGridMap::BeginPlay()
 	ATurnManager* TM = Cast<ATurnManager>(Found.Pop());
 	if(TM)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Turn Manager Found"));
 		TurnManager = TM;
 	}
 	else
@@ -70,13 +71,13 @@ APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
+		
+		//TODO check if tile is free
 		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);		//TODO save to turn manager to call updates
 	
 		AMurakha *SpawnedMurakha = Cast<AMurakha>(Spawn);
 		if (SpawnedMurakha)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("gridmap added"));
 			SpawnedMurakha->GridMap = this;
 			SpawnedMurakha->LocatedOn = GetTile(Location);
 

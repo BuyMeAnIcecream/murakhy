@@ -46,7 +46,6 @@ void UBTService_UpdatePriorities::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 				UE_LOG(LogTemp, Warning, TEXT("wrong bio priority"));
 			}
 			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->BioPriorityID, static_cast<UBlackboardKeyType_Enum::FDataType>(BioPriority));
-			UE_LOG(LogTemp, Warning, TEXT("bio priority set"));
 //			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
 		}
 	}

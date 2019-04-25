@@ -30,7 +30,7 @@ public:
 	AMurakhyAIController();
 
 	virtual void Possess(APawn* InPawn) override;
-	//uint8 BioPriorityID;
+
 	FBlackboard::FKey BioPriorityID;
 	FBlackboard::FKey TurnCompleteID;
 	//const bool& GetIsTurnComplete() const { return IsTurnComplete; }
@@ -39,8 +39,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
 		void UpdateOnTurn();
 	virtual void UpdateOnTurn_Implementation() override;
-//private:
-	//UPROPERTY(VisibleInstanceOnly, Category = "Turn")
-	//bool IsTurnComplete;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Behaviour")
+		uint8 VisionRadius;
 };
