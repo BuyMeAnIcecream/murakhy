@@ -87,6 +87,102 @@ void AGridMap::GetNeighborsOf(TArray<ATile*>& Out, FIntPoint TileLoc, uint8 Radi
 	}
 }
 
+EDirection AGridMap::CoordinatesToDirection(FIntPoint Coord)
+{
+	if (Coord.X == 0 && Coord.Y < 0)
+	{
+		return EDirection::ET_North;
+	}
+
+	if(Coord.X > 0 && Coord.Y < 0)
+	{
+		return EDirection::ET_NorthEast;
+	}
+
+	if (Coord.X > 0 && Coord.Y == 0)
+	{
+		return EDirection::ET_East;
+	}
+
+	if (Coord.X > 0 && Coord.Y > 0)
+	{
+		return EDirection::ET_SouthEast;
+	}
+
+	if (Coord.X == 0 && Coord.Y > 0)
+	{
+		return EDirection::ET_South;
+	}
+
+	if (Coord.X < 0 && Coord.Y > 0)
+	{
+		return EDirection::ET_SouthWest;
+	}
+
+	if (Coord.X < 0 && Coord.Y == 0)
+	{
+		return EDirection::ET_West;
+	}
+
+	if (Coord.X < 0 && Coord.Y < 0)
+	{
+		return EDirection::ET_NorthWest;
+	}
+
+return EDirection::ET_END;
+}
+
+
+FIntPoint AGridMap::DirectionToCoordinates(EDirection Dir)
+{
+	int X = 0;
+	int Y = 0;
+
+	switch (Dir)
+	{
+	case EDirection::ET_North:
+		Y = -1;
+		break;
+
+	case EDirection::ET_NorthEast:
+		X = 1;
+		Y = -1;
+		break;
+
+	case EDirection::ET_East:
+		X = 1;
+		break;
+
+	case EDirection::ET_SouthEast:
+		X = 1;
+		Y = 1;
+		break;
+
+	case EDirection::ET_South:
+		Y = 1;
+		break;
+
+	case EDirection::ET_SouthWest:
+		X = -1;
+		Y = 1;
+		break;
+
+	case EDirection::ET_West:
+		X = -1;
+		break;
+
+	case EDirection::ET_NorthWest:
+		X = -1;
+		Y = -1;
+		break;
+
+	default:
+		break;
+	}
+
+	return FIntPoint(X, Y);
+}
+
 APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 {
 	APawn* Spawn = nullptr;

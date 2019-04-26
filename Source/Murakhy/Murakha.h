@@ -7,21 +7,13 @@
 #include "Locatable.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "EBioParameter.h"
-
+#include "EDirection.h"
 //Normal Forward Declaration
 class AGridMap;
 
 #include "Murakha.generated.h"
 
-UENUM(BlueprintType)
-enum class EDirection : uint8
-{
-	ET_North UMETA(DisplayName = "North"),
-	ET_East UMETA(DisplayName = "East"),
-	ET_South UMETA(DisplayName = "South"),
-	ET_West UMETA(DisplayName = "West"),
-	ET_END
-};
+
 
 USTRUCT(BlueprintType)
 struct FParamValues

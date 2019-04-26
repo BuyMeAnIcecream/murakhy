@@ -28,8 +28,20 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			OwnerPawn->GridMap->GetNeighborsOf(Neighbors,OwnerLoc,PC->VisionRadius);
 
 			ETileType SearchedType =  ETileType(OwnerComp.GetBlackboardComponent()->GetValueAsEnum(OwnerComp.GetBlackboardComponent()->GetKeyName(PC->BioPriorityID)));
-//			Neighbors
-			
+			int HighestVal = 0;
+			ATile *Richest = nullptr;
+			for(auto& Neighbor: Neighbors)
+			{
+				if(Neighbor->ConsumableCurrent > HighestVal)
+				{
+					Richest = Neighbor;
+					HighestVal = Richest->ConsumableCurrent;
+				}
+			}
+			//NOT SURE IF THIS SHOULD BE SPLIT INTO EXTRA BTSERVICE
+			EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
+			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
+			//			AGridMap::CoordinatesToDirection()
 			//			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
 		
 		}

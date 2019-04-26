@@ -8,6 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "Tile.h"
 #include "TurnManager.h"
+#include "EDirection.h"
 #include "GridMap.generated.h"
 
 USTRUCT()
@@ -68,6 +69,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Map)
 	void GetNeighborsOf(TArray<ATile*>& Out, FIntPoint TileLoc, uint8 Radius);
+
+	//no clue where this should actually be. maybe, just static helper
+	UFUNCTION(BlueprintCallable, Category = Map)
+		static EDirection CoordinatesToDirection(FIntPoint Coord);
+
+	UFUNCTION(BlueprintCallable, Category = Map)
+		static FIntPoint DirectionToCoordinates(EDirection Dir);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -85,11 +85,14 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Consumable)
 	uint8 ConsumableCurrent;
-	/*
+
+	UPROPERTY(VisibleInstanceOnly, Category = Tile)
+	FIntPoint LocationOnMap;
+/*
 	void AddLocatable(TScriptInterface<ILocatable> *Locatable);
 
 	void RemoveLocatable(TScriptInterface<ILocatable> *Locatable);
-	*/
+*/
 
 	UFUNCTION(BlueprintCallable, Category = Consumable)
 	void ProduceConsumable();

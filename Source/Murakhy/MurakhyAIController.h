@@ -33,6 +33,7 @@ public:
 
 	FBlackboard::FKey BioPriorityID;
 	FBlackboard::FKey TurnCompleteID;
+	FBlackboard::FKey MovingDirectionID;
 	//const bool& GetIsTurnComplete() const { return IsTurnComplete; }
 	//void SetIsTurnComplete(const bool& itc) { IsTurnComplete = itc; }
 

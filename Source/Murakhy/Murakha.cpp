@@ -33,6 +33,7 @@ bool AMurakha::Move(EDirection Direction)
 	}
 
 	ATile* SteppingOn = nullptr;
+	//TODO clean this stuff with CoordinatesToDirection()
 	switch (Direction)
 	{
 	case EDirection::ET_North:
@@ -48,6 +49,21 @@ bool AMurakha::Move(EDirection Direction)
 			return false;
 		}
 		break;
+
+	case EDirection::ET_NorthEast:
+		if (GridMap->IsInBounds(GridLocation.X + 1, GridLocation.Y - 1) &&
+			!GridMap->GetTile(GridLocation.X + 1, GridLocation.Y - 1)->IsBusy)
+		{
+			GridLocation = FIntPoint(GridLocation.X + 1, GridLocation.Y - 1);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
+		}
+		break;
+
 	case EDirection::ET_East:
 		if (GridMap->IsInBounds(GridLocation.X + 1, GridLocation.Y) &&
 			!GridMap->GetTile(GridLocation.X + 1, GridLocation.Y)->IsBusy)
@@ -61,6 +77,21 @@ bool AMurakha::Move(EDirection Direction)
 			return false;
 		}
 		break;
+
+	case EDirection::ET_SouthEast:
+		if (GridMap->IsInBounds(GridLocation.X + 1, GridLocation.Y + 1) &&
+			!GridMap->GetTile(GridLocation.X + 1, GridLocation.Y + 1)->IsBusy)
+		{
+			GridLocation = FIntPoint(GridLocation.X + 1, GridLocation.Y + 1);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
+		}
+		break;
+
 	case EDirection::ET_South:
 		if (GridMap->IsInBounds(GridLocation.X, GridLocation.Y + 1) &&
 			!GridMap->GetTile(GridLocation.X, GridLocation.Y + 1)->IsBusy)
@@ -74,6 +105,21 @@ bool AMurakha::Move(EDirection Direction)
 			return false;
 		}
 		break;
+
+	case EDirection::ET_SouthWest:
+		if (GridMap->IsInBounds(GridLocation.X - 1, GridLocation.Y + 1) &&
+			!GridMap->GetTile(GridLocation.X - 1, GridLocation.Y + 1)->IsBusy)
+		{
+			GridLocation = FIntPoint(GridLocation.X - 1, GridLocation.Y + 1);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
+		}
+		break;
+
 	case EDirection::ET_West:
 		if (GridMap->IsInBounds(GridLocation.X - 1, GridLocation.Y) &&
 			!GridMap->GetTile(GridLocation.X - 1, GridLocation.Y)->IsBusy)
@@ -87,6 +133,21 @@ bool AMurakha::Move(EDirection Direction)
 			return false;
 		}
 		break;
+
+	case EDirection::ET_NorthWest:
+		if (GridMap->IsInBounds(GridLocation.X - 1, GridLocation.Y - 1) &&
+			!GridMap->GetTile(GridLocation.X - 1, GridLocation.Y - 1)->IsBusy)
+		{
+			GridLocation = FIntPoint(GridLocation.X - 1, GridLocation.Y - 1);
+			SteppingOn = GridMap->GetTile(GridLocation);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("tile out of bounds or taken"));
+			return false;
+		}
+		break;
+
 	default:
 		break;
 	}

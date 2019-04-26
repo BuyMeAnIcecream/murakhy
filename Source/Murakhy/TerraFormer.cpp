@@ -68,6 +68,10 @@ void ATerraFormer::TerraForm()
 				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 				ATile* NewTile = GetWorld()->SpawnActor<ATile>(Tile, FVector(x * 200, y * 200, 0), FRotator(0, 0, 0), ActorSpawnParams);
+				
+				NewTile->LocationOnMap.X = x;
+				NewTile->LocationOnMap.Y = y;
+				
 				NewTile->TileType = RandomizeFromMap();
 				NewTile->UpdateMaterial();
 				GridMap->Tiles[y].Add(NewTile);
@@ -98,7 +102,6 @@ ETileType ATerraFormer::RandomizeFromMap()
 		{
 			return Elem.Key;
 		}
-		
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Red, FString::Printf(TEXT("default tile")));
 	return ETileType::ET_Desert;
