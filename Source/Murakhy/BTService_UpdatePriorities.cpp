@@ -20,8 +20,6 @@ void UBTService_UpdatePriorities::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	
 	if(PC)
 	{
-		//TODO check if turn complete if(OwnerComp.GetBlackboardComponent()->GetValue())
-
 		AMurakha * OwnerPawn = Cast<AMurakha>(PC->GetPawn());
 		if(OwnerPawn)
 		{
@@ -30,6 +28,7 @@ void UBTService_UpdatePriorities::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 			{
 				return;
 			}
+			//TODO add priority curves. I love them and want them
 			//For now lets prioritize the lowest value
 			uint32 Lowest = 255;
 			EBioParameter BioPriority = EBioParameter::EBP_END;

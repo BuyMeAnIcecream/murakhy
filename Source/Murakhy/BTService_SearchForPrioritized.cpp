@@ -3,6 +3,7 @@
 #include "BTService_SearchForPrioritized.h"
 #include "MurakhyAIController.h"
 #include "Murakha.h"
+#include "GridMap.h"
 
 UBTService_SearchForPrioritized::UBTService_SearchForPrioritized()
 {
@@ -20,11 +21,17 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 		AMurakha * OwnerPawn = Cast<AMurakha>(PC->GetPawn());
 		if (OwnerPawn)
 		{
+			//get array of neighbors
 			ILocatable * OwnerLocatable = CastChecked<ILocatable>(OwnerPawn);
 			FIntPoint OwnerLoc = OwnerLocatable->Execute_GetGridLocation(OwnerPawn);
+			TArray<ATile*> Neighbors;
+			OwnerPawn->GridMap->GetNeighborsOf(Neighbors,OwnerLoc,PC->VisionRadius);
 
-//			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->BioPriorityID, static_cast<UBlackboardKeyType_Enum::FDataType>(BioPriority));
+			ETileType SearchedType =  ETileType(OwnerComp.GetBlackboardComponent()->GetValueAsEnum(OwnerComp.GetBlackboardComponent()->GetKeyName(PC->BioPriorityID)));
+//			Neighbors
+			
 			//			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
+		
 		}
 	}
 }

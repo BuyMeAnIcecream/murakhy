@@ -16,6 +16,8 @@ AGridMap::AGridMap()
 
 }
 
+
+
 // Called when the game starts or when spawned
 void AGridMap::BeginPlay()
 {
@@ -37,6 +39,7 @@ void AGridMap::BeginPlay()
 	
 }
 
+
 bool AGridMap::IsInBounds(const int x, const int y) const
 {
 	//TODO add check if can fit
@@ -46,7 +49,7 @@ bool AGridMap::IsInBounds(const int x, const int y) const
 			y < GridHeight;
 }
 
-ATile * AGridMap::GetTile(const int x, const int y)
+ATile * AGridMap::GetTile(const int x, const int y) 
 {
 	if (!IsInBounds(x, y) || !Tiles[y][x])
 	{
@@ -62,6 +65,26 @@ ATile * AGridMap::GetTile(const FIntPoint Location)
 		return nullptr;
 	}
 	return Tiles[Location.Y][Location.X];
+}
+
+
+void AGridMap::GetNeighborsOf(TArray<ATile*>& Out, FIntPoint TileLoc, uint8 Radius)
+{
+	for (int i = TileLoc.Y - Radius; i < TileLoc.Y + Radius + 1; ++i)
+	{
+		for (int j = TileLoc.X - Radius; j < TileLoc.X + Radius + 1; ++j)
+		{
+			if (TileLoc.X == j && TileLoc.Y == i)
+			{
+				continue;
+			}
+			ATile* CurrentTile = GetTile(i, j);
+			if (CurrentTile)
+			{
+				Out.Add(CurrentTile);
+			}
+		}
+	}
 }
 
 APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
@@ -107,16 +130,13 @@ ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)
 {
 	TArray<int> Times;
 
-	Times.Init(0, (int)ETileType::ET_End);
+	Times.Init(0, int(ETileType::ET_End));
 
 	for (int i = TileY - 1; i < TileY + 2; ++i)
 	{
 		for (int j = TileX - 1; j < TileX + 2; ++j)
 		{
-			if (i >= 0 &&
-				j >= 0 &&
-				i < GridHeight &&
-				j < GridWidth)
+			if (IsInBounds(i,j))
 			{
 				if (TileX == j && TileY == i)
 				{
@@ -124,7 +144,7 @@ ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)
 				}
 				//				UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);
 				ETileType CurrentType = Tiles[i][j]->TileType;
-				Times[(int)CurrentType] = Times[(int)CurrentType] + 1;
+				Times[int(CurrentType)] = Times[int(CurrentType)] + 1;
 				//				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("X  = %d Y = %d"), j, i));	
 			}
 		}
@@ -143,5 +163,7 @@ ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)
 		//		UE_LOG(YourLog, Warning, TEXT("times met %d"), times[i]);
 
 	}
-	return (ETileType)mostTimesIndex;
+	return ETileType(mostTimesIndex);
 }
+
+

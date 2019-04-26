@@ -66,6 +66,8 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = TurnManager)
 		ATurnManager *TurnManager;
 
+	UFUNCTION(BlueprintCallable, Category = Map)
+	void GetNeighborsOf(TArray<ATile*>& Out, FIntPoint TileLoc, uint8 Radius);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

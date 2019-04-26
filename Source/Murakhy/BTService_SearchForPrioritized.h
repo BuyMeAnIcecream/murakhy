@@ -16,4 +16,6 @@ class MURAKHY_API UBTService_SearchForPrioritized : public UBTService
 
 public:
 	UBTService_SearchForPrioritized();
+
+	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };
