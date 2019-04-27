@@ -44,12 +44,12 @@ void ATile::ProduceConsumable()
 
 	const FConsumableData ConsData = ConsumableInfo[TileType];
 	
-	if(ConsumableCurrent < ConsData.ConsumableMax)
+	if(ConsumableStored[ConsumableInfo[TileType].TypeProduced] < ConsData.ConsumableMax)
 	{
-		ConsumableCurrent += ConsData.AmountProducedPerTurn + FMath::RandRange(0, ConsData.RandomExtraProducedPerTurn);
-		if (ConsumableCurrent > ConsData.ConsumableMax)
+		ConsumableStored[ConsumableInfo[TileType].TypeProduced] += ConsData.AmountProducedPerTurn + FMath::RandRange(0, ConsData.RandomExtraProducedPerTurn);
+		if (ConsumableStored[ConsumableInfo[TileType].TypeProduced] > ConsData.ConsumableMax)
 		{
-			ConsumableCurrent = ConsData.ConsumableMax;
+			ConsumableStored[ConsumableInfo[TileType].TypeProduced] = ConsData.ConsumableMax;
 		}
 	}
 }

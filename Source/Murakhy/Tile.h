@@ -41,6 +41,7 @@ struct FConsumableData
 	uint8 RandomExtraProducedPerTurn;
 };
 
+
 UCLASS()
 class MURAKHY_API ATile : public AActor, public IUpdatable
 {
@@ -84,7 +85,7 @@ public:
 	TMap<ETileType, FConsumableData> ConsumableInfo;
 
 	UPROPERTY(VisibleAnywhere, Category = Consumable)
-	uint8 ConsumableCurrent;
+	TMap<EBioParameter, uint8> ConsumableStored;
 
 	UPROPERTY(VisibleInstanceOnly, Category = Tile)
 	FIntPoint LocationOnMap;
