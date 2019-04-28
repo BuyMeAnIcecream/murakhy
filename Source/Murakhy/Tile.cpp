@@ -23,6 +23,11 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	for (int i = 0; i < int(EBioParameter::EBP_END); i++)
+	{
+		ConsumableStored.Add(EBioParameter(i), 0);
+	}
 }
 
 void ATile::UpdateMaterial()

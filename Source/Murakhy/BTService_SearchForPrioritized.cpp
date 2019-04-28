@@ -24,10 +24,12 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			FIntPoint OwnerLoc = OwnerLocatable->Execute_GetGridLocation(OwnerPawn);
 			TArray<ATile*> Neighbors;
 			OwnerPawn->GridMap->GetNeighborsOf(Neighbors,OwnerLoc,PC->VisionRadius);
-
+			
 			const EBioParameter SearchedType =  EBioParameter(OwnerComp.GetBlackboardComponent()->GetValueAsEnum(OwnerComp.GetBlackboardComponent()->GetKeyName(PC->BioPriorityID)));
 			int HighestVal = 0;
 			ATile *Richest = nullptr;
+
+			//crashes here
 			for(auto& Neighbor: Neighbors)
 			{
 				if(Neighbor->ConsumableStored[SearchedType] > HighestVal)
@@ -36,7 +38,7 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 					HighestVal = Richest->ConsumableStored[SearchedType];
 				}
 			}
-
+			
 			//keep old direction if no resource found
 			if(!Richest)
 			{
@@ -45,6 +47,11 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			//NOT SURE IF THIS SHOULD BE SPLIT INTO EXTRA BTSERVICE
 			EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
 			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
+
+	//		OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
+
+			
+			
 		}
 	}
 }
