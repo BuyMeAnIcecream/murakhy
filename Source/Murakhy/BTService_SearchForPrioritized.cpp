@@ -49,9 +49,6 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
 
 	//		OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
-
-			
-			
 		}
 	}
 }

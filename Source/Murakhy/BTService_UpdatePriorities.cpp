@@ -24,10 +24,10 @@ void UBTService_UpdatePriorities::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 		if(OwnerPawn)
 		{
 			//TODO remove this by calling the whole thing on value changed
-			if(OwnerComp.GetBlackboardComponent()->GetValueAsBool("TurnComplete"))
-			{
-				return;
-			}
+//			if(OwnerComp.GetBlackboardComponent()->GetValueAsBool("TurnComplete"))
+//			{
+//				return;
+//			}
 			//TODO add priority curves. I love them and want them
 			//For now lets prioritize the lowest value
 			uint32 Lowest = 255;
