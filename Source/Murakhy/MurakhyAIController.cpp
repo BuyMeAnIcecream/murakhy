@@ -27,6 +27,7 @@ void AMurakhyAIController::Possess(APawn * InPawn)
 		BioPriorityID = BlackboardComp->GetKeyID("BioPriority");
 		TurnCompleteID = BlackboardComp->GetKeyID("TurnComplete");
 		MovingDirectionID = BlackboardComp->GetKeyID("MovingDirection");
+		ShouldConsumeID = BlackboardComp->GetKeyID("ShouldConsume");
 
 		BehaviorTreeComp->StartTree(*Murakha->Behavior);
 	}
