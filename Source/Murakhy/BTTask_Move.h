@@ -14,8 +14,5 @@ class MURAKHY_API UBTTask_Move : public UBTTaskNode
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
-	TEnumAsByte<EBTNodeResult::Type> TaskResult;
-
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

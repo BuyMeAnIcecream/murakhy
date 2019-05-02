@@ -42,19 +42,39 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			//see if current has more than richest. ahem, this means, Murakha doesn't consume resource that is under it's feet but looks for a better piece first
 			//Check if current tile contains more prioritized than neighbors and make move/stay choice based on that
 			
-			//TODO set RANDOM direction. Make sure is legit otherwise stuck on edges.
-			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(OwnerPawn->LocatedOn->ConsumableStored[SearchedType] >= HighestVal));
 			
+			//STAY AND EAT
+			if(HighestVal > 0 && OwnerPawn->LocatedOn->ConsumableStored[SearchedType] >= HighestVal)
+			{
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(true));
+			}
+			//WANDER
+			else if(HighestVal == 0)
+			{
+				//random direction
+				//TODO add looped RANDOM pick with verifier.
+				EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
+			}
+			//MOVE TO NEAREST RICHEST
+			else
+			{
+				EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
+			}
+			
+			
+			
+				
+	/*
 			
 			//keep old direction if no resource found
 			if(!Richest)
 			{
 				return;
 			}
-
+	*/
 			//NOT SURE IF THIS SHOULD BE SPLIT INTO EXTRA BTSERVICE
-			EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
-			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
 
 	//		OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
 		}
