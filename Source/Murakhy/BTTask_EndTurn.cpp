@@ -17,7 +17,9 @@ EBTNodeResult::Type UBTTask_EndTurn::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	if(PC)
 	{
 		OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
+		UE_LOG(LogTemp, Warning, TEXT("Turn Ended"));
 		return EBTNodeResult::Succeeded;
 	}
+
 	return EBTNodeResult::Failed;
 }

@@ -17,9 +17,11 @@ EBTNodeResult::Type UBTTask_Move::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 		{
 			if(MyPawn->Move(ChosenDir))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Move Succeeded"));
 				return EBTNodeResult::Succeeded;
 			}
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Move Failed"));
 	return EBTNodeResult::Failed;
 }

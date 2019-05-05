@@ -46,29 +46,33 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			//STAY AND EAT
 			if(HighestVal > 0 && OwnerPawn->LocatedOn->ConsumableStored[SearchedType] >= HighestVal)
 			{
-				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(true));
+				UE_LOG(LogTemp, Warning, TEXT("STAY AND EAT"));
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(true));
 			}
 			//WANDER
 			else if(HighestVal == 0)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Wandering"));
 				EDirection DesiredDirection;
 				//random direction
 				//TODO TEST.
 				do
 				{
-					DesiredDirection = EDirection(FMath::RandRange(0, int(EDirection::ET_END)));
+					DesiredDirection = EDirection(FMath::RandRange(0, int(EDirection::ET_NorthWest)));
 				} while (!OwnerPawn->GridMap->IsMoveAllowed(OwnerPawn,DesiredDirection));
 	
 				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
-				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
 			}
 			//MOVE TO NEAREST RICHEST
 			else
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Moving to nearest reachest"));
 				EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
 				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
-				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
 			}
+			
 		}
 	}
 }
