@@ -49,6 +49,12 @@ bool AGridMap::IsInBounds(const int x, const int y) const
 			y < GridHeight;
 }
 
+bool AGridMap::IsMoveAllowed(AMurakha* Murakha, EDirection Direction) const
+{
+	const FIntPoint LocationAfterMove(DirectionToCoordinates(Direction) + Murakha->GetGridLocation());
+	return(IsInBounds(LocationAfterMove.X, LocationAfterMove.Y));
+}
+
 ATile * AGridMap::GetTile(const int x, const int y) 
 {
 	if (!IsInBounds(x, y) || !Tiles[y][x])

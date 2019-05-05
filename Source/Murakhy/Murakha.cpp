@@ -16,6 +16,12 @@ AMurakha::AMurakha()
 	RootComponent = Root;
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetMobility(EComponentMobility::Movable);
+
+	for (int i = 0; i < int(EBioParameter::EBP_END); i++)
+	{
+		CurrentBioParam.Add(EBioParameter(i));
+		CurrentBioParam[EBioParameter(i)] = 0;
+	}
 }
 
 TArray<APawn*> AMurakha::ScanForPawns()
@@ -180,12 +186,12 @@ void AMurakha::Consume(const EBioParameter BioParam, uint8 &Available)
 	}
 	
 	//check if we need less to fill param
-	if (BioParams[BioParam].Current + ToBeConsumed > BioParams[BioParam].Max)
+	if (CurrentBioParam[BioParam] + ToBeConsumed > BioParams[BioParam].Max)
 	{
-		ToBeConsumed = BioParams[BioParam].Max - BioParams[BioParam].Current;
+		ToBeConsumed = BioParams[BioParam].Max - CurrentBioParam[BioParam];
 	}
 	
-	BioParams[BioParam].Current += ToBeConsumed;
+	CurrentBioParam[BioParam] += ToBeConsumed;
 	Available -= ToBeConsumed;
 }
 

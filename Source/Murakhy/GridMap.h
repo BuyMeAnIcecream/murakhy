@@ -50,6 +50,7 @@ public:
 		int32 GridHeight;
 
 	bool IsInBounds(int x, int y) const;
+	bool IsMoveAllowed(AMurakha* Murakha, EDirection Direction) const;
 
 	ATile* GetTile(int x, int y);
 

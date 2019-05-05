@@ -51,9 +51,15 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			//WANDER
 			else if(HighestVal == 0)
 			{
+				EDirection DesiredDirection;
 				//random direction
-				//TODO add looped RANDOM pick with verifier.
-				EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
+				//TODO TEST.
+				do
+				{
+					DesiredDirection = EDirection(FMath::RandRange(0, int(EDirection::ET_END)));
+				} while (!OwnerPawn->GridMap->IsMoveAllowed(OwnerPawn,DesiredDirection));
+	
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
 				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
 			}
 			//MOVE TO NEAREST RICHEST
@@ -61,24 +67,8 @@ void UBTService_SearchForPrioritized::TickNode(UBehaviorTreeComponent& OwnerComp
 			{
 				EDirection DesiredDirection = AGridMap::CoordinatesToDirection(Richest->LocationOnMap - OwnerPawn->LocatedOn->LocationOnMap);
 				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->MovingDirectionID, static_cast<UBlackboardKeyType_Enum::FDataType>(DesiredDirection));
+				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(false));
 			}
-			
-			
-			
-				
-	/*
-			
-			//keep old direction if no resource found
-			if(!Richest)
-			{
-				return;
-			}
-	*/
-			//NOT SURE IF THIS SHOULD BE SPLIT INTO EXTRA BTSERVICE
-
-	//		OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
 		}
 	}
 }
-
-

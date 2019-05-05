@@ -19,9 +19,6 @@ USTRUCT(BlueprintType)
 struct FParamValues
 {
 	GENERATED_BODY()
-		
-	UPROPERTY(VisibleAnywhere, Category = Data)
-	uint8 Current; //TODO move out of struct. keep struct as db
 	
 	UPROPERTY(EditDefaultsOnly, Category = Data)
 	uint8 Max;
@@ -66,13 +63,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Root")
 	USceneComponent* Root;
 
-	UPROPERTY(EditDefaultsOnly, Category = "BioParameters")
-		TMap<EBioParameter, FParamValues> BioParams;
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+		TMap <EBioParameter, FParamValues> BioParams;
 
+	UPROPERTY(VisibleAnywhere, Category = "BioParameters")
+		TMap <EBioParameter, uint8> CurrentBioParam;
 
 	UFUNCTION(BlueprintCallable, Category = "Consume")
 		void Consume(EBioParameter BioParam, uint8 &Available);
-	//TODO scan area
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
