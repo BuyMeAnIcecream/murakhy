@@ -191,14 +191,20 @@ FIntPoint AGridMap::DirectionToCoordinates(EDirection Dir)
 
 APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 {
+	//check if can be spawned here
+	if (!GetTile(Location) || GetTile(Location)->IsBusy)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tile busy || out of bounds. Can't Spawn here"));
+		return nullptr;
+	}
+
 	APawn* Spawn = nullptr;
 	if (PawnToSpawn)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		
-		//TODO check if tile is free
-		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);		//TODO save to turn manager to call updates
+
+		Spawn = GetWorld()->SpawnActor<APawn>(PawnToSpawn, SpawnParams);
 	
 		AMurakha *SpawnedMurakha = Cast<AMurakha>(Spawn);
 		if (SpawnedMurakha)
@@ -226,6 +232,15 @@ APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 	return Spawn;
 }
 
+APawn* AGridMap::SpawnMurakhaAtRandom()
+{
+	APawn* Spawn = nullptr;
+	while (!Spawn)
+	{
+		Spawn =	SpawnMurakha(FIntPoint(FMath::RandRange(0, GridWidth - 1), FMath::RandRange(0, GridHeight - 1)));
+	}
+	return Spawn;
+}
 
 
 ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)

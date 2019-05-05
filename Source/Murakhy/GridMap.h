@@ -61,7 +61,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Spawn)
 		APawn* SpawnMurakha(FIntPoint Location);
 
-	//TODO spawnAt(tile to spawn at)
+	UFUNCTION(BlueprintCallable, Category = Spawn)
+		APawn* SpawnMurakhaAtRandom();
+
 	UPROPERTY(EditDefaultsOnly, Category = Spawn)
 		TSubclassOf<class APawn> PawnToSpawn;
 
