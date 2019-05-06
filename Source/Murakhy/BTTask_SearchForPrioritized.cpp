@@ -51,7 +51,6 @@ EBTNodeResult::Type UBTTask_SearchForPrioritized::ExecuteTask(UBehaviorTreeCompo
 				UE_LOG(LogTemp, Warning, TEXT("Wandering"));
 				EDirection DesiredDirection;
 				//random direction
-				//TODO TEST.
 				do
 				{
 					DesiredDirection = EDirection(FMath::RandRange(0, int(EDirection::ET_NorthWest)));

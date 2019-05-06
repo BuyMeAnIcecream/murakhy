@@ -1,27 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BTService_UpdatePriorities.h"
+#include "BTTask_UpdatePriorities.h"
 #include "MurakhyAIController.h"
 #include "Murakha.h"
 
-UBTService_UpdatePriorities::UBTService_UpdatePriorities()
-{
-//	Super::
-	NodeName = "Update Priorities";
 
-//	bNotifyBecomeRelevant = true;    // necessarily!!!
-	bCreateNodeInstance = true;
-}
-
-void UBTService_UpdatePriorities::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+EBTNodeResult::Type UBTTask_UpdatePriorities::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	
 	AMurakhyAIController* PC = Cast<AMurakhyAIController>(OwnerComp.GetAIOwner());
-	
-	if(PC)
+
+	if (PC)
 	{
 		AMurakha * OwnerPawn = Cast<AMurakha>(PC->GetPawn());
-		if(OwnerPawn)
+		if (OwnerPawn)
 		{
 			//TODO add priority curves. I love them and want them
 			//For now lets prioritize the lowest value
@@ -35,14 +26,13 @@ void UBTService_UpdatePriorities::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 					BioPriority = Elem.Key;
 				}
 			}
-			if(BioPriority == EBioParameter::EBP_END)
+			if (BioPriority == EBioParameter::EBP_END)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("wrong bio priority"));
 			}
 			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Enum>(PC->BioPriorityID, static_cast<UBlackboardKeyType_Enum::FDataType>(BioPriority));
-//			OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->TurnCompleteID, true);
-		
+			return EBTNodeResult::Succeeded;
+		}
 	}
-	}
-
+	return EBTNodeResult::Failed;
 }

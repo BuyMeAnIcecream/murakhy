@@ -6,7 +6,6 @@
 void AMurakhyAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	//IsTurnComplete = false;
 }
 
 AMurakhyAIController::AMurakhyAIController()
@@ -29,6 +28,7 @@ void AMurakhyAIController::Possess(APawn * InPawn)
 		MovingDirectionID = BlackboardComp->GetKeyID("MovingDirection");
 		ShouldConsumeID = BlackboardComp->GetKeyID("ShouldConsume");
 
+		BlackboardComp->SetValueAsBool("TurnComplete", true);
 		BehaviorTreeComp->StartTree(*Murakha->Behavior);
 	}
 }
