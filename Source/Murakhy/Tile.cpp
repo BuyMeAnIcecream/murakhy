@@ -39,7 +39,15 @@ void ATile::UpdateMaterial()
 	}
 }
 
+void ATile::OnTileTypeUpdated()
+{
+	for (int i = 0; i < int(EBioParameter::EBP_END); i++) 	//removing all the previously stored stuff
+	{
+		ConsumableStored[EBioParameter(i)] = 0;
+	}
 
+	UpdateMaterial(); 
+}
 void ATile::ProduceConsumable()
 {
 	if (!ConsumableInfo.Contains(TileType))

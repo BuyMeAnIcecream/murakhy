@@ -63,6 +63,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Tile)
 	void UpdateMaterial();
 
+	UFUNCTION(BlueprintCallable, Category = Tile)
+	void OnTileTypeUpdated();
+
 	UPROPERTY(VisibleAnywhere, Category = Tile)
 	bool IsBusy;
 
