@@ -16,8 +16,6 @@ AGridMap::AGridMap()
 
 }
 
-
-
 // Called when the game starts or when spawned
 void AGridMap::BeginPlay()
 {
@@ -38,7 +36,6 @@ void AGridMap::BeginPlay()
 	}
 	
 }
-
 
 bool AGridMap::IsInBounds(const int x, const int y) const
 {
@@ -72,7 +69,6 @@ ATile * AGridMap::GetTile(const FIntPoint Location)
 	}
 	return Tiles[Location.Y][Location.X];
 }
-
 
 void AGridMap::GetNeighborsOf(TArray<ATile*>& Out, FIntPoint TileLoc, uint8 Radius)
 {
@@ -137,7 +133,6 @@ EDirection AGridMap::CoordinatesToDirection(FIntPoint Coord)
 
 return EDirection::ET_END;
 }
-
 
 FIntPoint AGridMap::DirectionToCoordinates(EDirection Dir)
 {
@@ -242,7 +237,6 @@ APawn* AGridMap::SpawnMurakhaAtRandom()
 	return Spawn;
 }
 
-
 ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)
 {
 	TArray<int> Times;
@@ -282,5 +276,3 @@ ETileType AGridMap::TopTypeOfNeighbors(int TileX, int TileY)
 	}
 	return ETileType(mostTimesIndex);
 }
-
-
