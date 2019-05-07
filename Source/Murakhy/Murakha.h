@@ -56,7 +56,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	bool Move(EDirection Direction);
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Consume")
+	void Consume(EBioParameter BioParam, ATile *ConsumeOff);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent *Mesh;
 
@@ -68,9 +71,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "BioParameters")
 		TMap <EBioParameter, uint8> CurrentBioParam;
-
+/*
 	UFUNCTION(BlueprintCallable, Category = "Consume")
 		void Consume(EBioParameter BioParam, uint8 &Available);
+*/
 
 protected:
 	// Called when the game starts or when spawned

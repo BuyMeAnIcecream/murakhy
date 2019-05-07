@@ -171,7 +171,7 @@ bool AMurakha::Move(EDirection Direction)
 	UpdateLocation_Implementation();
 	return true;
 }
-
+/*
 void AMurakha::Consume(const EBioParameter BioParam, uint8 &Available)
 {
 	//check if we have more than can consume
@@ -194,7 +194,15 @@ void AMurakha::Consume(const EBioParameter BioParam, uint8 &Available)
 	CurrentBioParam[BioParam] += ToBeConsumed;
 	Available -= ToBeConsumed;
 }
-
+*/
+void AMurakha::Consume(EBioParameter BioParam, ATile *ConsumeOff)
+{
+	CurrentBioParam[BioParam] += ConsumeOff->ConsumeOff(BioParam, BioParams[BioParam].ConsumesInTurn);
+	if(CurrentBioParam[BioParam] > BioParams[BioParam].Max)
+	{
+		CurrentBioParam[BioParam] = BioParams[BioParam].Max;
+	}
+}
 // Called when the game starts or when spawned
 void AMurakha::BeginPlay()
 {

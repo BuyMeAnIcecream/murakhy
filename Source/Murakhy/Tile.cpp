@@ -48,6 +48,7 @@ void ATile::OnTileTypeUpdated()
 
 	UpdateMaterial(); 
 }
+
 void ATile::ProduceConsumable()
 {
 	if (!ConsumableInfo.Contains(TileType))
@@ -78,9 +79,26 @@ void ATile::MovedOn(AMurakha * Murakha)
 	MurakhaOnTile = Murakha;
 	IsBusy = true;
 }
+
 void ATile::UpdateOnTurn_Implementation()
 {
 	ProduceConsumable();
+}
+
+uint8 ATile::ConsumeOff(EBioParameter Consumable, uint8 Amount)
+{
+	uint8 Consumed = 0;
+	if(ConsumableStored[Consumable] < Amount)
+	{
+		Consumed = ConsumableStored[Consumable];
+		ConsumableStored[Consumable] = 0;
+	}
+	else
+	{
+		ConsumableStored[Consumable] -= Amount;
+		Consumed = Amount;
+	}
+	return Consumed;
 }
 /*
 void ATile::AddLocatable(TScriptInterface<ILocatable> *Locatable)

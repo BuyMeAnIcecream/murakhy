@@ -73,7 +73,7 @@ void ATerraFormer::TerraForm()
 				NewTile->LocationOnMap.Y = y;
 				
 				NewTile->TileType = RandomizeFromMap();
-				NewTile->UpdateMaterial();
+				NewTile->OnTileTypeUpdated();
 				GridMap->Tiles[y].Add(NewTile);
 				//add to updatable array
 				if (TurnManager)
@@ -109,7 +109,7 @@ ETileType ATerraFormer::RandomizeFromMap()
 
 
 
-void ATerraFormer::Smooth()
+void ATerraFormer::Smooth() const
 {
 	//TODO dynamic array
 	ETileType NewTileTypes[20][20];
@@ -126,7 +126,7 @@ void ATerraFormer::Smooth()
 		for (int x = 0; x < Width; x++)
 		{
 			GridMap->Tiles[y][x]->TileType = NewTileTypes[y][x];
-			GridMap->Tiles[y][x]->UpdateMaterial();
+			GridMap->Tiles[y][x]->OnTileTypeUpdated();
 		}
 	}
 }

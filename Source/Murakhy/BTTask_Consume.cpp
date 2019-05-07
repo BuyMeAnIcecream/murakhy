@@ -16,7 +16,7 @@ EBTNodeResult::Type UBTTask_Consume::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 		AMurakha* MyPawn = Cast<AMurakha>(PC->GetPawn());
 		if (MyPawn)
 		{
-			MyPawn->Consume(Prioritized, MyPawn->LocatedOn->ConsumableStored[Prioritized]);
+			MyPawn->Consume(Prioritized, MyPawn->LocatedOn);
 			return EBTNodeResult::Succeeded;
 			
 		}

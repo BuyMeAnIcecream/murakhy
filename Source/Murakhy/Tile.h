@@ -109,5 +109,5 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
 	void UpdateOnTurn();
 	virtual void UpdateOnTurn_Implementation() override;
-
+	uint8 ConsumeOff(EBioParameter Consumable, uint8 Amount);
 };

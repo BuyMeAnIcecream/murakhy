@@ -43,7 +43,7 @@ public:
 	ETileType RandomizeFromMap();
 
 	UFUNCTION(BlueprintCallable, Category = Terra)
-	void Smooth();
+	void Smooth() const;
 
 	UPROPERTY(EditInstanceOnly, Category = TurnManager)
 	ATurnManager *TurnManager;
