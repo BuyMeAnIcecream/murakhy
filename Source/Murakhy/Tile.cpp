@@ -17,6 +17,8 @@ ATile::ATile()
 	
 	IsBusy = false;
 	//Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+    //TODO fix dis. add a bunch of them manually and store the references.
+
 }
 
 // Called when the game starts or when spawned
@@ -27,6 +29,17 @@ void ATile::BeginPlay()
 	for (int i = 0; i < int(EBioParameter::EBP_END); i++)
 	{
 		ConsumableStored.Add(EBioParameter(i), 0);
+	}
+
+	TArray<UActorComponent*> Temp = GetComponentsByTag(UStaticMeshComponent::StaticClass(),TEXT("Visual"));
+	for (auto& AComp : Temp)
+	{
+		UStaticMeshComponent* Mesh = Cast<UStaticMeshComponent>(AComp);
+		if(Mesh)
+		{
+			Meshes.Add(Mesh);
+			UE_LOG(LogTemp, Warning, TEXT("Mesh Name %s"), *GetNameSafe(Mesh));
+		}
 	}
 }
 
@@ -78,6 +91,11 @@ void ATile::MovedOn(AMurakha * Murakha)
 {
 	MurakhaOnTile = Murakha;
 	IsBusy = true;
+}
+
+void ATile::UpdateVisuals()
+{
+
 }
 
 void ATile::UpdateOnTurn_Implementation()

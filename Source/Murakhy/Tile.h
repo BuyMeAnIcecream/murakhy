@@ -28,16 +28,16 @@ struct FConsumableData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	EBioParameter TypeProduced;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	uint8 ConsumableMax;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	uint8 AmountProducedPerTurn;
 
-	UPROPERTY(EditDefaultsOnly, Category = Data)
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	uint8 RandomExtraProducedPerTurn;
 };
 
@@ -60,37 +60,37 @@ protected:
 		*/
 
 public:
-	UFUNCTION(BlueprintCallable, Category = Tile)
+	UFUNCTION(BlueprintCallable, Category = "Tile")
 	void UpdateMaterial();
 
-	UFUNCTION(BlueprintCallable, Category = Tile)
+	UFUNCTION(BlueprintCallable, Category = "Tile")
 	void OnTileTypeUpdated();
 
-	UPROPERTY(VisibleAnywhere, Category = Tile)
+	UPROPERTY(VisibleAnywhere, Category = "Tile")
 	bool IsBusy;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enum")
 	ETileType TileType;
 
-	UPROPERTY(EditDefaultsOnly, Category = Tile)
+	UPROPERTY(EditDefaultsOnly, Category = "Tile")
 	TMap<ETileType, UMaterial*> MaterialMap;
 
-	UPROPERTY(EditDefaultsOnly, Category = Tile)
+	UPROPERTY(EditDefaultsOnly, Category = "Tile")
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(VisibleAnywhere, Category = Tile)
+	UPROPERTY(VisibleAnywhere, Category = "Tile")
 	AMurakha *MurakhaOnTile;
 
-	UPROPERTY(BlueprintReadOnly, Category = Tile)
+	UPROPERTY(BlueprintReadOnly, Category = "Tile")
 	USceneComponent* Root;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
 	TMap<ETileType, FConsumableData> ConsumableInfo;
 
-	UPROPERTY(VisibleAnywhere, Category = Consumable)
+	UPROPERTY(VisibleAnywhere, Category = "Consumable")
 	TMap<EBioParameter, uint8> ConsumableStored;
 
-	UPROPERTY(VisibleInstanceOnly, Category = Tile)
+	UPROPERTY(VisibleInstanceOnly, Category = "Tile")
 	FIntPoint LocationOnMap;
 /*
 	void AddLocatable(TScriptInterface<ILocatable> *Locatable);
@@ -98,16 +98,23 @@ public:
 	void RemoveLocatable(TScriptInterface<ILocatable> *Locatable);
 */
 
-	UFUNCTION(BlueprintCallable, Category = Consumable)
+	UFUNCTION(BlueprintCallable, Category = "Consumable")
 	void ProduceConsumable();
 
 	void MovedOff();
 	
 	void MovedOn(AMurakha* Murakha);
 
+	UPROPERTY(VisibleAnywhere, Category = "Visuals")
+		TArray<UStaticMeshComponent*> Meshes;
+
+	UFUNCTION(BlueprintCallable, Category = "Visuals")
+		void UpdateVisuals();
+
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
 	void UpdateOnTurn();
 	virtual void UpdateOnTurn_Implementation() override;
+
 	uint8 ConsumeOff(EBioParameter Consumable, uint8 Amount);
 };
