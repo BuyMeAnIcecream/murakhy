@@ -38,8 +38,15 @@ void ATile::BeginPlay()
 		if(Mesh)
 		{
 			Meshes.Add(Mesh);
-			UE_LOG(LogTemp, Warning, TEXT("Mesh Name %s"), *GetNameSafe(Mesh));
+			continue;
 		}
+		USceneComponent* SceneComp = Cast<USceneComponent>(AComp);
+		if(SceneComp)
+		{
+			VisualSockets.Add(SceneComp);
+			UE_LOG(LogTemp, Warning, TEXT("SceneComp %s"), *GetNameSafe(SceneComp));
+		}
+
 	}
 }
 
@@ -95,12 +102,26 @@ void ATile::MovedOn(AMurakha * Murakha)
 
 void ATile::UpdateVisuals()
 {
+	for(int i = 0; i < int(EBioParameter::EBP_END); i++)
+	{
 
+		if(VisualSockets.IsValidIndex(i) && Meshes.IsValidIndex(i))
+		{
+			if (ConsumableStored[EBioParameter(i)] <= 0)
+			{
+				Meshes[i]->SetVisibility(false);
+				continue;
+			}
+			Meshes[i]->SetWorldLocation(VisualSockets[i]->GetComponentLocation());
+			Meshes[i]->SetVisibility(true);
+		}
+	}
 }
 
 void ATile::UpdateOnTurn_Implementation()
 {
 	ProduceConsumable();
+	UpdateVisuals();
 }
 
 uint8 ATile::ConsumeOff(EBioParameter Consumable, uint8 Amount)

@@ -108,6 +108,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Visuals")
 		TArray<UStaticMeshComponent*> Meshes;
 
+	UPROPERTY(VisibleAnywhere, Category = "Visuals")
+		TArray<USceneComponent*> VisualSockets;
+
 	UFUNCTION(BlueprintCallable, Category = "Visuals")
 		void UpdateVisuals();
 
