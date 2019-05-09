@@ -15,7 +15,7 @@ ATile::ATile()
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetMobility(EComponentMobility::Movable);
 	
-	IsBusy = false;
+	bIsBusy = false;
 	//Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
     //TODO fix dis. add a bunch of them manually and store the references.
 
@@ -31,7 +31,7 @@ void ATile::BeginPlay()
 		ConsumableStored.Add(EBioParameter(i), 0);
 	}
 
-	TArray<UActorComponent*> TempMesh = GetComponentsByTag(UStaticMeshComponent::StaticClass(),TEXT("Visual"));
+	TArray<UActorComponent*> TempMesh = GetComponentsByTag(UStaticMeshComponent::StaticClass(),TEXT("BioMesh"));
 	for (auto& AComp : TempMesh)
 	{
 		UStaticMeshComponent* Mesh = Cast<UStaticMeshComponent>(AComp);
@@ -41,16 +41,17 @@ void ATile::BeginPlay()
 		}
 	}
 
-	TArray<UActorComponent*> TempScene = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("Visual"));
+	TArray<UActorComponent*> TempScene = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("VisualSockets"));
 	for(auto& AScene: TempScene)
 	{
 		USceneComponent* SceneComp = Cast<USceneComponent>(AScene);
 		if (SceneComp)
 		{
 			VisualSockets.Add(SceneComp);
-			UE_LOG(LogTemp, Warning, TEXT("SceneComp %s"), *GetNameSafe(SceneComp));
 		}
 	}
+
+	UpdateVisuals();
 }
 
 void ATile::UpdateMaterial()
@@ -94,21 +95,27 @@ void ATile::ProduceConsumable()
 void ATile::MovedOff()
 {
 	MurakhaOnTile = nullptr;
-	IsBusy = false;
+	bIsBusy = false;
+	UpdateVisuals();
 }
 
 void ATile::MovedOn(AMurakha * Murakha)
 {
 	MurakhaOnTile = Murakha;
-	IsBusy = true;
+	bIsBusy = true;
+	UpdateVisuals();
 }
 
 void ATile::UpdateVisuals()
 {
 	int nextSocketIndex = 0; //free socket
+	if(bIsBusy) //free some space for murakha occupying the tile
+	{
+		nextSocketIndex = 1;
+	}
+
 	for(int i = 0; i < int(EBioParameter::EBP_END); i++)
 	{
-
 		if(VisualSockets.IsValidIndex(nextSocketIndex) && Meshes.IsValidIndex(i))
 		{
 			if (ConsumableStored[EBioParameter(i)] <= 0)

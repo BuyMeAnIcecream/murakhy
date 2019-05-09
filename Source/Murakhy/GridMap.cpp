@@ -187,7 +187,7 @@ FIntPoint AGridMap::DirectionToCoordinates(EDirection Dir)
 APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 {
 	//check if can be spawned here
-	if (!GetTile(Location) || GetTile(Location)->IsBusy)
+	if (!GetTile(Location) || GetTile(Location)->bIsBusy)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Tile busy || out of bounds. Can't Spawn here"));
 		return nullptr;

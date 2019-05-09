@@ -67,7 +67,7 @@ public:
 	void OnTileTypeUpdated();
 
 	UPROPERTY(VisibleAnywhere, Category = "Tile")
-	bool IsBusy;
+	bool bIsBusy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enum")
 	ETileType TileType;
