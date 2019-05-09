@@ -31,22 +31,25 @@ void ATile::BeginPlay()
 		ConsumableStored.Add(EBioParameter(i), 0);
 	}
 
-	TArray<UActorComponent*> Temp = GetComponentsByTag(UStaticMeshComponent::StaticClass(),TEXT("Visual"));
-	for (auto& AComp : Temp)
+	TArray<UActorComponent*> TempMesh = GetComponentsByTag(UStaticMeshComponent::StaticClass(),TEXT("Visual"));
+	for (auto& AComp : TempMesh)
 	{
 		UStaticMeshComponent* Mesh = Cast<UStaticMeshComponent>(AComp);
 		if(Mesh)
 		{
 			Meshes.Add(Mesh);
-			continue;
 		}
-		USceneComponent* SceneComp = Cast<USceneComponent>(AComp);
-		if(SceneComp)
+	}
+
+	TArray<UActorComponent*> TempScene = GetComponentsByTag(USceneComponent::StaticClass(), TEXT("Visual"));
+	for(auto& AScene: TempScene)
+	{
+		USceneComponent* SceneComp = Cast<USceneComponent>(AScene);
+		if (SceneComp)
 		{
 			VisualSockets.Add(SceneComp);
 			UE_LOG(LogTemp, Warning, TEXT("SceneComp %s"), *GetNameSafe(SceneComp));
 		}
-
 	}
 }
 
@@ -102,18 +105,20 @@ void ATile::MovedOn(AMurakha * Murakha)
 
 void ATile::UpdateVisuals()
 {
+	int nextSocketIndex = 0; //free socket
 	for(int i = 0; i < int(EBioParameter::EBP_END); i++)
 	{
 
-		if(VisualSockets.IsValidIndex(i) && Meshes.IsValidIndex(i))
+		if(VisualSockets.IsValidIndex(nextSocketIndex) && Meshes.IsValidIndex(i))
 		{
 			if (ConsumableStored[EBioParameter(i)] <= 0)
 			{
 				Meshes[i]->SetVisibility(false);
 				continue;
 			}
-			Meshes[i]->SetWorldLocation(VisualSockets[i]->GetComponentLocation());
+			Meshes[i]->SetWorldLocation(VisualSockets[nextSocketIndex]->GetComponentLocation());
 			Meshes[i]->SetVisibility(true);
+			nextSocketIndex++;
 		}
 	}
 }
