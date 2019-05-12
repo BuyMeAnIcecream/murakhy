@@ -203,10 +203,24 @@ void AMurakha::Consume(EBioParameter BioParam, ATile *ConsumeOff)
 		CurrentBioParam[BioParam] = BioParams[BioParam].Max;
 	}
 }
+void AMurakha::Age()
+{
+	if (CurrentAge >= DiesIn)
+	{
+		DetachFromControllerPendingDestroy();
+		LocatedOn->MovedOff();
+		Destroy();//Die
+	}
+	else
+	{
+		CurrentAge++;
+	}
+}
 // Called when the game starts or when spawned
 void AMurakha::BeginPlay()
 {
 	Super::BeginPlay();
+	DiesIn = LifeSpan +FMath::RandRange(-RandomDeviation, RandomDeviation);
 }
 
 
@@ -221,6 +235,11 @@ void AMurakha::UpdateLocation_Implementation()
 		SetActorLocation(FVector(0,0, 200) + LocatedOn->GetActorLocation());	
 		//LocatedOn->AddLocatable();
 	}
+}
+
+void AMurakha::UpdateOnTurn_Implementation()
+{
+	Age();
 }
 
 FIntPoint AMurakha::GetGridLocation_Implementation()

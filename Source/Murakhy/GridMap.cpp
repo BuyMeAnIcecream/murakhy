@@ -220,8 +220,11 @@ APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 				if(TurnManager)
 				{
 					TurnManager->AddUpdatable(AIController);
+					TurnManager->AddUpdatable(SpawnedMurakha);
 				}
 			}
+
+			
 		}
 	}
 	return Spawn;

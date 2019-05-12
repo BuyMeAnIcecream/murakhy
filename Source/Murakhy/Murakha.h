@@ -8,6 +8,7 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "EBioParameter.h"
 #include "EDirection.h"
+#include "Updatable.h"
 //Normal Forward Declaration
 class AGridMap;
 
@@ -32,7 +33,7 @@ struct FParamValues
 	
 
 UCLASS()
-class MURAKHY_API AMurakha : public APawn, public ILocatable
+class MURAKHY_API AMurakha : public APawn, public ILocatable, public IUpdatable
 {
 	GENERATED_BODY()
 
@@ -71,6 +72,21 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "BioParameters")
 		TMap <EBioParameter, uint8> CurrentBioParam;
+
+	UPROPERTY(EditDefaultsOnly, Category = "LifeSpan")
+		int LifeSpan;
+
+	UPROPERTY(EditDefaultsOnly, Category = "LifeSpan")
+		int RandomDeviation;
+
+	UPROPERTY(VisibleAnywhere, Category = "LifeSpan")
+		int CurrentAge = 0;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "LifeSpan")
+		int DiesIn;
+
+	UFUNCTION(BlueprintCallable, Category = "Lifespan")
+		void Age();
 /*
 	UFUNCTION(BlueprintCallable, Category = "Consume")
 		void Consume(EBioParameter BioParam, uint8 &Available);
@@ -101,6 +117,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "GridLocation")
 		void UpdateLocation();
 	virtual void UpdateLocation_Implementation() override;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Update")
+		void UpdateOnTurn();
+	virtual void UpdateOnTurn_Implementation() override;
 
 	/*
 	//Some pointer is defined to any class inheriting from UObject
