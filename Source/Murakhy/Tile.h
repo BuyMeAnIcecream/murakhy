@@ -87,6 +87,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
 	TMap<ETileType, FConsumableData> ConsumableInfo;
 
+	UPROPERTY(EditDefaultsOnly, Category = "ConsumableData")
+	TMap<ETileType, uint32> ProductionCycle;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Consumable")
+	uint32 ProductionCounter;
+
 	UPROPERTY(VisibleAnywhere, Category = "Consumable")
 	TMap<EBioParameter, uint8> ConsumableStored;
 
@@ -100,6 +106,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Consumable")
 	void ProduceConsumable();
+
+	UFUNCTION(BlueprintCallable, Category = "Consumable")
+	void UpdateProduction();
+
 
 	void MovedOff();
 	

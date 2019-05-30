@@ -35,12 +35,13 @@ EBTNodeResult::Type UBTTask_SearchForPrioritized::ExecuteTask(UBehaviorTreeCompo
 				}
 			}
 
+			
 			//see if current has more than richest. ahem, this means, Murakha doesn't consume resource that is under it's feet but looks for a better piece first
 			//Check if current tile contains more prioritized than neighbors and make move/stay choice based on that
 
 
 			//STAY AND EAT
-			if (HighestVal > 0 && OwnerPawn->LocatedOn->ConsumableStored[SearchedType] >= HighestVal)
+			if (HighestVal > 0 && OwnerPawn->LocatedOn->ConsumableStored[SearchedType] >= HighestVal)			//this is nonsense. pretty sad
 			{
 				UE_LOG(LogTemp, Warning, TEXT("STAY AND EAT"));
 				OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(PC->ShouldConsumeID, static_cast<UBlackboardKeyType_Bool::FDataType>(true));

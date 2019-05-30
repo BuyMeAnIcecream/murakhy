@@ -92,6 +92,20 @@ void ATile::ProduceConsumable()
 	}
 }
 
+void ATile::UpdateProduction()
+{
+	if (ProductionCounter > ProductionCycle[TileType])
+	{
+		ProductionCounter = 0;
+		ProduceConsumable();
+	}
+	else
+	{
+		ProductionCounter++;
+	}
+
+}
+
 void ATile::MovedOff()
 {
 	MurakhaOnTile = nullptr;
@@ -132,7 +146,7 @@ void ATile::UpdateVisuals()
 
 void ATile::UpdateOnTurn_Implementation()
 {
-	ProduceConsumable();
+	UpdateProduction();
 	UpdateVisuals();
 }
 
