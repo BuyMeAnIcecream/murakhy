@@ -3,6 +3,7 @@
 #include "Murakha.h"
 #include "Tile.h"
 #include "GridMap.h"
+#include "MurakhyAIController.h"
 #include "Runtime/Engine/Classes/Engine/Engine.h"
 
 // Sets default values
@@ -16,12 +17,14 @@ AMurakha::AMurakha()
 	RootComponent = Root;
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetMobility(EComponentMobility::Movable);
-
+	
 	for (int i = 0; i < int(EBioParameter::EBP_END); i++)
 	{
 		CurrentBioParam.Add(EBioParameter(i));
 		CurrentBioParam[EBioParameter(i)] = 0;
 	}
+
+	LifeSpan = 25;
 }
 
 TArray<APawn*> AMurakha::ScanForPawns()
@@ -171,30 +174,7 @@ bool AMurakha::Move(EDirection Direction)
 	UpdateLocation_Implementation();
 	return true;
 }
-/*
-void AMurakha::Consume(const EBioParameter BioParam, uint8 &Available)
-{
-	//check if we have more than can consume
-	uint8 ToBeConsumed = 0;
-	if (Available <= BioParams[BioParam].ConsumesInTurn)
-	{
-		ToBeConsumed = Available;
-	}
-	else
-	{
-		ToBeConsumed = BioParams[BioParam].ConsumesInTurn;
-	}
-	
-	//check if we need less to fill param
-	if (CurrentBioParam[BioParam] + ToBeConsumed > BioParams[BioParam].Max)
-	{
-		ToBeConsumed = BioParams[BioParam].Max - CurrentBioParam[BioParam];
-	}
-	
-	CurrentBioParam[BioParam] += ToBeConsumed;
-	Available -= ToBeConsumed;
-}
-*/
+
 void AMurakha::Consume(EBioParameter BioParam, ATile *ConsumeOff)
 {
 	CurrentBioParam[BioParam] += ConsumeOff->ConsumeOff(BioParam, BioParams[BioParam].ConsumesInTurn);
@@ -205,8 +185,14 @@ void AMurakha::Consume(EBioParameter BioParam, ATile *ConsumeOff)
 }
 void AMurakha::Age()
 {
-	if (CurrentAge >= DiesIn)
+	if (CurrentAge >= DiesAt)
 	{
+		if (TurnManager)
+		{
+			TurnManager->RemoveUpdatable(this);
+			AMurakhyAIController* Controller = Cast<AMurakhyAIController>(GetController());
+			TurnManager->RemoveUpdatable(Controller);
+		}
 		DetachFromControllerPendingDestroy();
 		LocatedOn->MovedOff();
 		Destroy();//Die
@@ -220,7 +206,7 @@ void AMurakha::Age()
 void AMurakha::BeginPlay()
 {
 	Super::BeginPlay();
-	DiesIn = LifeSpan +FMath::RandRange(-RandomDeviation, RandomDeviation);
+	DiesAt = LifeSpan +FMath::RandRange(-RandomDeviation, RandomDeviation);
 }
 
 
@@ -232,7 +218,7 @@ void AMurakha::UpdateLocation_Implementation()
 	if (LocatedOn)
 	{
 		//TODO add capsule and add it's half height
-		SetActorLocation(FVector(0,0, 200) + LocatedOn->GetActorLocation());	
+		SetActorLocation(FVector(0, 0, 150) + LocatedOn->GetActorLocation());	
 		//LocatedOn->AddLocatable();
 	}
 }

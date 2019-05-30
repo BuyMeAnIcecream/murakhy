@@ -42,6 +42,7 @@ void ATurnManager::RemoveUpdatable(UObject* ToRemove)
 	IUpdatable* Updatable = Cast<IUpdatable>(ToRemove);
 	if (Updatable)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("%s removed from updatables"), *GetNameSafe(ToRemove));
 		Updatables.Remove(ToRemove);
 	}
 }

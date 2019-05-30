@@ -206,6 +206,7 @@ APawn* AGridMap::SpawnMurakha(const FIntPoint Location)
 		{
 			SpawnedMurakha->GridMap = this;
 			SpawnedMurakha->LocatedOn = GetTile(Location);
+			SpawnedMurakha->TurnManager = TurnManager;
 
 			ILocatable* Locatable = Cast<ILocatable>(Spawn);
 			if (Locatable)

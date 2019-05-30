@@ -11,7 +11,7 @@
 #include "Updatable.h"
 //Normal Forward Declaration
 class AGridMap;
-
+class ATurnManager;
 #include "Murakha.generated.h"
 
 
@@ -83,10 +83,13 @@ public:
 		int CurrentAge = 0;
 
 	UPROPERTY(VisibleInstanceOnly, Category = "LifeSpan")
-		int DiesIn;
+		int DiesAt;
 
 	UFUNCTION(BlueprintCallable, Category = "Lifespan")
 		void Age();
+
+	UPROPERTY(VisibleInstanceOnly, Category = "TurnManager")
+		ATurnManager* TurnManager;
 /*
 	UFUNCTION(BlueprintCallable, Category = "Consume")
 		void Consume(EBioParameter BioParam, uint8 &Available);

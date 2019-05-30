@@ -80,6 +80,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Map)
 		static FIntPoint DirectionToCoordinates(EDirection Dir);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
